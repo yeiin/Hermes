@@ -28,12 +28,16 @@ LEFT_EYEBROW =[ 336, 296, 334, 293, 300, 276, 283, 282, 295, 285 ]
 # right eyes indices
 RIGHT_EYE=[ 33, 7, 163, 144, 145, 153, 154, 155, 133, 173, 157, 158, 159, 160, 161 , 246 ]  
 RIGHT_EYEBROW=[ 70, 63, 105, 66, 107, 55, 65, 52, 53, 46 ]
-
+#print(">>>>1")
 map_face_mesh = mp.solutions.face_mesh
 # camera object 
 camera = cv.VideoCapture(0)
+#print(">>>>2")
+
 # landmark detection function 
 def landmarksDetection(img, results, draw=False):
+    #print(">>>>3")
+
     img_height, img_width= img.shape[:2]
     # list[(x,y), (x,y)....]
     mesh_coord = [(int(point.x * img_width), int(point.y * img_height)) for point in results.multi_face_landmarks[0].landmark]
@@ -45,6 +49,8 @@ def landmarksDetection(img, results, draw=False):
 
 # Euclaidean distance 
 def euclaideanDistance(point, point1):
+    #print(">>>>4")
+
     x, y = point
     x1, y1 = point1
     distance = math.sqrt((x1 - x)**2 + (y1 - y)**2)
@@ -84,64 +90,71 @@ def blinkRatio(img, landmarks, right_indices, left_indices):
     ratio = (reRatio+leRatio)/2
     return ratio 
 
+#print(">>>>5")
 
+def main():
+    global frame_counter, CEF_COUNTER, TOTAL_BLINKS
+    
+    with map_face_mesh.FaceMesh(min_detection_confidence =0.5, min_tracking_confidence=0.5) as face_mesh:
+        #print(">>>>6")
 
-with map_face_mesh.FaceMesh(min_detection_confidence =0.5, min_tracking_confidence=0.5) as face_mesh:
-
-    # starting time here 
-    start_time = time.time()
-    # starting Video loop here.
-    while True:
-        frame_counter +=1 # frame counter
-        ret, frame = camera.read() # getting frame from camera 
-        if not ret: 
-            break # no more frames break
-        #  resizing frame
-        
-        frame = cv.resize(frame, None, fx=1.5, fy=1.5, interpolation=cv.INTER_CUBIC)
-        frame_height, frame_width= frame.shape[:2]
-        rgb_frame = cv.cvtColor(frame, cv.COLOR_RGB2BGR)
-        results  = face_mesh.process(rgb_frame)
-        if results.multi_face_landmarks:
-            mesh_coords = landmarksDetection(frame, results, False)
-            ratio = blinkRatio(frame, mesh_coords, RIGHT_EYE, LEFT_EYE)
-            # cv.putText(frame, f'ratio {ratio}', (100, 100), FONTS, 1.0, utils.GREEN, 2)
-            utils.colorBackgroundText(frame,  f'Ratio : {round(ratio,2)}', FONTS, 0.7, (30,100),2, utils.PINK, utils.YELLOW)
-
-            if ratio >5.5: #eye closed
-                CEF_COUNTER +=1
-                # cv.putText(frame, 'Blink', (200, 50), FONTS, 1.3, utils.PINK, 2)
-                utils.colorBackgroundText(frame,  f'Blink', FONTS, 1.7, (int(frame_height/2), 100), 2, utils.YELLOW, pad_x=6, pad_y=6, )
-                baby.eye_list.append(0)
-                print(baby.eye_list)
-            else: #eye opened
-                if CEF_COUNTER>CLOSED_EYES_FRAME:
-                    baby.eye_list.append(2) #eye blink
-                    TOTAL_BLINKS +=1
-                    CEF_COUNTER =0
-                    print(baby.eye_list)
-                else:
-                    baby.eye_list.append(1) #eye opened
-                    print(baby.eye_list)
-            # cv.putText(frame, f'Total Blinks: {TOTAL_BLINKS}', (100, 150), FONTS, 0.6, utils.GREEN, 2)
-            utils.colorBackgroundText(frame,  f'Total Blinks: {TOTAL_BLINKS}', FONTS, 0.7, (30,150),2)
+        # starting time here 
+        start_time = time.time()
+        # starting Video loop here.
+        while True:
+            frame_counter +=1 # frame counter
+            ret, frame = camera.read() # getting frame from camera 
+            if not ret: 
+                break # no more frames break
+            #  resizing frame
             
-            cv.polylines(frame,  [np.array([mesh_coords[p] for p in LEFT_EYE ], dtype=np.int32)], True, utils.GREEN, 1, cv.LINE_AA)
-            cv.polylines(frame,  [np.array([mesh_coords[p] for p in RIGHT_EYE ], dtype=np.int32)], True, utils.GREEN, 1, cv.LINE_AA)
+            frame = cv.resize(frame, None, fx=1.5, fy=1.5, interpolation=cv.INTER_CUBIC)
+            frame_height, frame_width= frame.shape[:2]
+            rgb_frame = cv.cvtColor(frame, cv.COLOR_RGB2BGR)
+            results  = face_mesh.process(rgb_frame)
+            if results.multi_face_landmarks:
+                mesh_coords = landmarksDetection(frame, results, False)
+                ratio = blinkRatio(frame, mesh_coords, RIGHT_EYE, LEFT_EYE)
+                # cv.putText(frame, f'ratio {ratio}', (100, 100), FONTS, 1.0, utils.GREEN, 2)
+                utils.colorBackgroundText(frame,  f'Ratio : {round(ratio,2)}', FONTS, 0.7, (30,100),2, utils.PINK, utils.YELLOW)
 
-        else:
-            print("no detection")
+                if ratio >5.5: #eye closed
+                    CEF_COUNTER +=1
+                    # cv.putText(frame, 'Blink', (200, 50), FONTS, 1.3, utils.PINK, 2)
+                    utils.colorBackgroundText(frame,  f'Blink', FONTS, 1.7, (int(frame_height/2), 100), 2, utils.YELLOW, pad_x=6, pad_y=6, )
+                    baby.eye_list = baby.eye_list[1:]
+                    baby.eye_list.append(0)
+                else: #eye opened
+                    if CEF_COUNTER>CLOSED_EYES_FRAME:
+                        baby.eye_list = baby.eye_list[1:]
+                        baby.eye_list.append(2) #eye blink
+                        TOTAL_BLINKS +=1
+                        CEF_COUNTER =0
+                    else:
+                        baby.eye_list = baby.eye_list[1:]
+                        baby.eye_list.append(1) #eye opened
+                # cv.putText(frame, f'Total Blinks: {TOTAL_BLINKS}', (100, 150), FONTS, 0.6, utils.GREEN, 2)
+                utils.colorBackgroundText(frame,  f'Total Blinks: {TOTAL_BLINKS}', FONTS, 0.7, (30,150),2)
+                
+                cv.polylines(frame,  [np.array([mesh_coords[p] for p in LEFT_EYE ], dtype=np.int32)], True, utils.GREEN, 1, cv.LINE_AA)
+                cv.polylines(frame,  [np.array([mesh_coords[p] for p in RIGHT_EYE ], dtype=np.int32)], True, utils.GREEN, 1, cv.LINE_AA)
 
-        # calculating  frame per seconds FPS
-        end_time = time.time()-start_time
-        fps = frame_counter/end_time
+            else:
+                print("no detection")
 
-        frame =utils.textWithBackground(frame,f'FPS: {round(fps,1)}',FONTS, 1.0, (30, 50), bgOpacity=0.9, textThickness=2)
-        # writing image for thumbnail drawing shape
-        # cv.imwrite(f'img/frame_{frame_counter}.png', frame)
-        cv.imshow('frame', frame)
-        key = cv.waitKey(2)
-        if key==ord('q') or key ==ord('Q'):
-            break
-    cv.destroyAllWindows()
-    camera.release()
+            # calculating  frame per seconds FPS
+            end_time = time.time()-start_time
+            fps = frame_counter/end_time
+
+            frame =utils.textWithBackground(frame,f'FPS: {round(fps,1)}',FONTS, 1.0, (30, 50), bgOpacity=0.9, textThickness=2)
+            # writing image for thumbnail drawing shape
+            # cv.imwrite(f'img/frame_{frame_counter}.png', frame)
+            cv.imshow('frame', frame)
+            key = cv.waitKey(2)
+            if key==ord('q') or key ==ord('Q'):
+                break
+        cv.destroyAllWindows()
+        camera.release()
+
+if __name__ == "__main__":
+	main()

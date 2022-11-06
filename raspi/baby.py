@@ -9,7 +9,7 @@ import time
 baby = None
 before = None
 state = False
-eye_list = [None for i in range(100)]
+eye_list = [ None for i in range(100) ]
 close_counter = 0
 wake_counter = 0
 camerat = None
@@ -51,12 +51,10 @@ def eyeController():
         elif(eye_list[50:].count(constant.CLOSE)>=35 and eye_list[50:].count(constant.EMPTY)<=10):
             close_counter += 1
     if(baby != before):
-        print(f"baby is {baby} before baby")
+        print(f"baby is {baby} before {before}")
         before = baby
     
 
-    
-    
     
 def main():
     print("baby main ok")
@@ -75,11 +73,11 @@ def main():
             audiot.start()
             print(f"ledt is {ledt}, mobilet is {mobilet} audiot = {audiot}")
             baby=constant.WAKE
+            
         if(state==True and baby==constant.NONE):
             print("Enter join gpio thread")
             state = False
             joinGpioThread(ledt, mobilet, audiot)
-            print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>G")
             
 
 def joinGpioThread(ledt, mobilet, audiot):    

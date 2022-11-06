@@ -8,6 +8,8 @@ GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)
 StepPins = [8,9,10,11]
 
+mobile_state = False
+
 #핀 출력 설정
 for pin in StepPins:
     GPIO.setup(pin,GPIO.OUT)
@@ -17,10 +19,10 @@ StepCounter = 0   # 스텝 수 세는 변수
 
 # 싱글 코일 여자 방식 시퀀스
 StepCount = 4
-Seq =  [[0,0,0,1],
-        [0,0,1,0],
-        [0,1,0,0],
-        [1,0,0,0]]
+Seq =  [[0,0,0,100],
+        [0,0,100,0],
+        [0,100,0,0],
+        [100,0,0,0]]
 
 def mobile():
     global StepCounter
@@ -51,8 +53,11 @@ def mobile():
         
         
 def main():
+    global mobile_state
     if(baby.state==True):
-        mobile()
+        mobile_state = True
+        
+    mobile()
         
 if __name__ == "__main__":
 	main()
