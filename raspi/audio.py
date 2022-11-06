@@ -12,9 +12,9 @@ def playMusic():
     pygame.mixer.init()
     
     if(music=="a"):
-        pygame.mixer.music.load("/home/pi/Documents/Hermes/asset/music_a.mp3")
+        pygame.mixer.music.load("/home/pi/Hermes/raspi/asset/music_a.mp3")
     else:
-        pygame.mixer.music.load("/home/pi/Documents/Hermes/asset/music_b.mp3") 
+        pygame.mixer.music.load("/home/pi/Hermes/raspi/asset/music_b.mp3") 
     
     pygame.mixer.music.play()
 
@@ -38,7 +38,6 @@ def endMusic():
     end = True
 
 def main():
-    print(">>>>>>>>>>>>>>>audio")
     playMusic()
 
 if __name__ == "__main__":

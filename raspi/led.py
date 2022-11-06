@@ -10,88 +10,96 @@ GPIO.setwarnings(False)
 
 LED1 = 21 # BCM P21
 LED2 = 20
+LAMP = 26
 
 light_list = [LED1, LED2]
 
 GPIO.setup(LED1, GPIO.OUT)
-print("HELLO")
 GPIO.setup(LED2, GPIO.OUT)
-print("h")
+GPIO.setup(LAMP, GPIO.OUT)
+
 pwm1 = GPIO.PWM(LED1,50) #50hz  
 pwm2 = GPIO.PWM(LED2,50) #50hz  
-print("!!")
+pwm3 = GPIO.PWM(LAMP, 50)
+
 pwm1.start(0)  
 pwm2.start(0)  
+pwm3.start(0)
 
 dc = 0
+lamp_dc = 0
 power = False
 
-print("--")
-
 def lightOn(light):
-    global dc, power
-    dc = 100
+    global dc, power, lamp_dc
     power = True
-    print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+   
     if(light==LED1):
+        dc = 100
         pwm1.ChangeDutyCycle(dc)
+        lighting()
     elif(light==LED2):
+        dc = 100
         pwm2.ChangeDutyCycle(dc)
+        lighting()
+    elif(light==LAMP):
+        lamp_dc = 100
+        pwm3.ChangeDutyCycle(lamp_dc)
+        lighting()
     
-
-
+    
 def lightOff(light):
-    global dc, power
+    global dc, power, lamp_dc
     dc = 0
     power = False
-    GPIO.output(light, GPIO.LOW)
-
+    
+    if(light==LED1):
+        dc = 0
+        pwm1.ChangeDutyCycle(dc)
+    elif(light==LED2):
+        dc = 0
+        pwm2.ChangeDutyCycle(dc)
+    elif(light==LAMP):
+        lamp_dc = 0
+        pwm3.ChangeDutyCycle(lamp_dc)
 
 def lighting():
-    global dc
     global power
-    
-    
-    while power:                        # 무한 반복 - LED On/Off
-        light = random.choice(light_list)
+    while power:           
+        time.sleep(1)
         
-        GPIO.output(light, GPIO.HIGH) 
+
+def randomLight():
+    global dc, power
+    power = True
+    while power:
+        light = random.choice(light_list)
         dc = 100
-        time.sleep(0.5)
-
-        GPIO.output(light, GPIO.LOW)
-        dc = 0
-        time.sleep(0.5)
+        if(light==LED1):
+            pwm1.ChangeDutyCycle(dc)
+            time.sleep(2)
+            dc = 0
+            pwm1.ChangeDutyCycle(dc)
+        elif(light==LED2):
+            pwm2.ChangeDutyCycle(dc) 
+            time.sleep(2)
+            dc = 0
+            pwm2.ChangeDutyCycle(dc)
     
-    print("finish")
 
-def changDutyCycle(mode):
-    global dc
+def changLampDutyCycle(mode):
+    global lamp_dc
     if(mode == 0):   
-        dc -= 5
-        pwm1.ChangeDutyCycle(dc)
-        pwm2.ChangeDutyCycle(dc)
+        if(lamp_dc >= 5):
+            lamp_dc -= 5
+            pwm3.ChangeDutyCycle(lamp_dc)
     else:
-        dc += 5
-        pwm1.ChangeDutyCycle(dc)
-        pwm2.ChangeDutyCycle(dc)
+        if(lamp_dc<=95):
+            lamp_dc += 5
+            pwm3.ChangeDutyCycle(lamp_dc)
 
 def main():
-    global power
-    power = True
-    print("light 1 on")
-    lightOn(LED1)
-    # if(baby.state == True):
-    #     lighting()
-        # while power:
-        #     while(dc>=5):
-        #         changDutyCycle(0)
-        #         time.sleep(5)
-        #     while(dc<=95):
-        #         changDutyCycle(1)
-        #         time.sleep(5)
+    randomLight()
 
 if __name__ == "__main__":
 	main() 
-
-print("WOW")

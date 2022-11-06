@@ -2,12 +2,15 @@ import threading
 import time
 import baby
 import camera
+print("ok")
  
+print("after camera")
 def main():
 	try:
 		t1 = threading.Thread(target=baby.main)
 		t1.start()
-		t2 = threading.Thread(target=camera)
+		print("HELLO")
+		t2 = threading.Thread(target=camera.main)
 		t2.start()
   
 		while True:
@@ -27,7 +30,7 @@ def main():
 def join(t1, t2):
     print(">>>>>>>>>>>>>>join")
     t1.join()
-    t2.join()		
+    t2.join()	
  
 if __name__ == "__main__":
 	main()

@@ -5,14 +5,13 @@ import mobile
 import audio
 import time
 
-
 baby = None
 before = None
 state = False
 eye_list = [None for i in range(100)]
 close_counter = 0
 wake_counter = 0
-camerat = None
+ledt = None
 mobilet = None
 audiot = None
 
@@ -20,12 +19,9 @@ audiot = None
 def eyeController():
     global baby,before
     global close_counter,wake_counter
-    global eye_list
     
     count0 = eye_list.count(constant.OPEN) #open
     count1 = eye_list.count(constant.CLOSE) #close
-    
-    print("in baby", count0)
     
     if(eye_list.count(constant.EMPTY)>=80):
         baby = constant.NONE
@@ -59,21 +55,20 @@ def eyeController():
     
     
 def main():
-    print("baby main ok")
     global baby, state
-    global camerat, mobilet, audiot
+    global ledt, mobilet, audiot
     while(1):
         eyeController()
         if(baby==constant.AWAKE or baby== constant.WAKE and state == False):
             print("make gpio thread")
-            camerat = threading.Thread(target=camera.main)
+            ledt = threading.Thread(target=led.main)
             mobilet = threading.Thread(target=mobile.main)
             audiot = threading.Thread(target=audio.playMusic)
             state = True
-            camerat.start()
+            ledt.start()
             mobilet.start()
             audiot.start()
-            print(f"camerat is {camerat}, mobilet is {mobilet} audiot = {audiot}")
+            print(f"ledt is {ledt}, mobilet is {mobilet} audiot = {audiot}")
             baby=constant.WAKE
         if(state==True and baby==constant.NONE):
             print("Enter join gpio thread")
