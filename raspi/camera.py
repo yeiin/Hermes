@@ -123,16 +123,14 @@ def main():
                     # cv.putText(frame, 'Blink', (200, 50), FONTS, 1.3, utils.PINK, 2)
                     utils.colorBackgroundText(frame,  f'Blink', FONTS, 1.7, (int(frame_height/2), 100), 2, utils.YELLOW, pad_x=6, pad_y=6, )
                     baby.eye_list = baby.eye_list[1:]
-                    baby.eye_list.append(0)
+                    baby.eye_list.append(1)
                 else: #eye opened
                     if CEF_COUNTER>CLOSED_EYES_FRAME:
-                        baby.eye_list = baby.eye_list[1:]
-                        baby.eye_list.append(2) #eye blink
                         TOTAL_BLINKS +=1
                         CEF_COUNTER =0
                     else:
                         baby.eye_list = baby.eye_list[1:]
-                        baby.eye_list.append(1) #eye opened
+                        baby.eye_list.append(0) #eye opened
                 # cv.putText(frame, f'Total Blinks: {TOTAL_BLINKS}', (100, 150), FONTS, 0.6, utils.GREEN, 2)
                 utils.colorBackgroundText(frame,  f'Total Blinks: {TOTAL_BLINKS}', FONTS, 0.7, (30,150),2)
                 
@@ -141,6 +139,8 @@ def main():
 
             else:
                 print("no detection")
+                baby.eye_list = baby.eye_list[1:]
+                baby.eye_list.append(2) #no detection
 
             # calculating  frame per seconds FPS
             end_time = time.time()-start_time

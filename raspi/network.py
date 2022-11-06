@@ -16,37 +16,29 @@ msg = ""
 server_socket = None
 client_socket = None
 addr = None
+rt = None
+st = None
 
 def init():
     global server_socket, client_socket, addr
     
-    # Pick an open Port (1000+ recommended), must match the server port
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
     server_socket.bind((HOST, PORT))
     server_socket.listen()
 
-    print(">>>>>>>>>>>>>")
     client_socket, addr = server_socket.accept()
-
-    print("client_socket")
-    print(client_socket)
 
 def receive():
     global code, client_socket, addr
     
-    # 무한루프를 돌면서 
     while True:
         
-        # 클라이언트가 보낸 메시지를 수신하기 위해 대기합니다. 
         data = client_socket.recv(1024)
         
-        # # 빈 문자열을 수신하면 루프를 중지합니다. 
         if not data:
             break
-
-        print('Received from', addr, data.decode())
         
         if data == b'\x00\x012':
             print("mobile on")
@@ -99,37 +91,41 @@ def send():
         # voice
         msg += "1"
         print(">>>>>>>>>>>>>>>>>>>>>>>>msg", msg)
-        client_socket.sendall(msg.encode())
+        client_socket.sendall(msg.encode('utf-8'))
+        time.sleep(1)
     
     
 
 
 def close():
+    global rt, st
+    print(">>>>>>>network join")
     global client_socket, server_socket
-# 소켓을 닫습니다.
-    client_socket.close()
+    # 소켓을 닫습니다.
+    if client_socket != None:
+        client_socket.close()
     server_socket.close()
+    if rt != None:
+        rt.join()
+    if st != None:
+        st.join()
 
 
 def main():
-   
+    global rt, st
     try:
         init()
-        
-        t1 = threading.Thread(target=receive)
-        t1.start()
-        t2 = threading.Thread(target=send)
-        t2.start()
+        rt = threading.Thread(target=receive)
+        rt.start()
+        st = threading.Thread(target=send)
+        st.start()
         
         while True:
-            time.sleep(0.1)
+            time.sleep(1)
     
     except KeyboardInterrupt:
         print("Ctrl+C Pressed.")
         close()
-        t1.join()
-        t2.join()
-        #need to 
 
 if __name__ == "__main__":
 	main()

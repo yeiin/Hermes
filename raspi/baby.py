@@ -5,82 +5,116 @@ import mobile
 import audio
 import time
 
-
+#baby status NONE, ASLEEP, SLEEP, AWAKE, WAKE
 baby = None
-before = None
+
+#count if baby is not detected
+exist_cnt = 0
+
+#count to check baby's initial status
+init_cnt = 0
+flag = 0
+
+#baby's initial status
+INIT_STATS = None
+
+#baby's status list from camera.py
+#OPEN, CLOSE, EMPTY
+eye_list = [ None for i in range(30) ]
+
+#for threads
 state = False
-eye_list = [ None for i in range(100) ]
-close_counter = 0
-wake_counter = 0
 camerat = None
 mobilet = None
 audiot = None
 
+def rateCalculator(): #opening eyes rate calculator
+    
+    global eye_list
+    
+    rate = 0
+
+    count0 = eye_list.count(constant.OPEN) #open
+    count1 = eye_list.count(constant.CLOSE) #close
+    print(count0, count1)
+    
+    if count0 != 0 and count1 != 0:
+        rate = count0/(count0 + count1)
+    
+    return rate
 
 def eyeController():
-    global baby,before
-    global close_counter,wake_counter
+    
+    global baby
+    global INIT_STATS # baby status when count 10
     global eye_list
+    global init_cnt, exist_cnt
+    global flag
     
     count0 = eye_list.count(constant.OPEN) #open
     count1 = eye_list.count(constant.CLOSE) #close
     
-    print("in baby", count0)
+    if count0 != 0 and count1 != 0 and flag == 0:
+        INIT_STATS = baby
+        flag = 1
     
-    if(eye_list.count(constant.EMPTY)>=80):
-        baby = constant.NONE
-        wake_counter = 0
-        close_counter = 0
-    else:
-        if(baby == constant.ASLEEP and count1>=70):
-            baby = constant.SLEEP
-            wake_counter = 0
-            
-        elif(baby == constant.AWAKE and count0>=70 and wake_counter>=1000):
-            baby = constant.WAKE
-            
-        elif(baby != constant.WAKE and count0 >= 5):
-            baby = constant.AWAKE
-            wake_counter += 1
-            close_counter = 0
-            
-        elif(baby != constant.SLEEP and close_counter>=10 and count0>=60):
-            baby = constant.ASLEEP
-            wake_counter = 0
-            
-        elif(eye_list[50:].count(constant.CLOSE)>=35 and eye_list[50:].count(constant.EMPTY)<=10):
-            close_counter += 1
-    if(baby != before):
-        print(f"baby is {baby} before {before}")
-        before = baby
+    rate = rateCalculator()
+    
+    print("rate", rate)
+    print(INIT_STATS)
     
 
-    
+    if(eye_list[len(eye_list)-1] == constant.EMPTY): #baby detection failed
+        print("baby isn't detected")
+        exist_cnt = exist_cnt + 1
+        if exist_cnt == 10:
+            baby = constant.NONE
+            exist_cnt = 0
+    else: #baby detected
+        print("baby is detected")
+        if rate >= 0.85:
+            print("baby is waken")
+            baby = constant.WAKE
+        elif rate >= 0.1:
+            if INIT_STATS == constant.SLEEP:
+                print("baby is awaked!!")
+                baby = constant.AWAKE
+            elif INIT_STATS == constant.AWAKE:
+                print("baby is falling asleep")
+                baby = constant.ASLEEP
+        else:
+            print("baby is sleeping")
+            baby = constant.SLEEP        
+
 def main():
     print("baby main ok")
     global baby, state
     global camerat, mobilet, audiot
     while(1):
-        eyeController()
-        if(baby==constant.AWAKE or baby== constant.WAKE and state == False):
-            print("make gpio thread")
-            ledt = threading.Thread(target=led.main)
-            mobilet = threading.Thread(target=mobile.main)
-            audiot = threading.Thread(target=audio.playMusic)
-            state = True
-            ledt.start()
-            mobilet.start()
-            audiot.start()
-            print(f"ledt is {ledt}, mobilet is {mobilet} audiot = {audiot}")
-            baby=constant.WAKE
-            
-        if(state==True and baby==constant.NONE):
-            print("Enter join gpio thread")
-            state = False
+        try:
+            eyeController()
+            if(baby==constant.AWAKE or baby== constant.WAKE and state == False):
+                print("make gpio thread")
+                ledt = threading.Thread(target=led.main)
+                mobilet = threading.Thread(target=mobile.main)
+                audiot = threading.Thread(target=audio.playMusic)
+                state = True
+                ledt.start()
+                mobilet.start()
+                audiot.start()
+                print(f"ledt is {ledt}, mobilet is {mobilet} audiot = {audiot}")
+                baby=constant.WAKE
+                
+            if(state==True and baby==constant.NONE):
+                print("Enter join gpio thread")
+                state = False
+                joinGpioThread(ledt, mobilet, audiot)
+        except KeyboardInterrupt:
             joinGpioThread(ledt, mobilet, audiot)
             
 
 def joinGpioThread(ledt, mobilet, audiot):    
+    print(">>>>>>>>>>>>>>joinGpioThread")
     led.power = False
     ledt.join()
     mobilet.join()
