@@ -3,11 +3,11 @@ import time
 import constant
  
 music = constant.DEFAULT_MUSIC
-music_state = False
+music_state = None
+
 
 def playMusic():
     global music_state
-    print(">>>>>>>>>>>playMusic")
     pygame.mixer.init()
     
     if(music=="a"):
@@ -21,20 +21,22 @@ def playMusic():
         continue
 
 
-# def changeMusic(newMusic):
-#     global music_state
-#     global music
+def changeMusic(newMusic):
+    global music_state
+    global music
     
-#     music_state = False
-#     music = newMusic
-#     music_state = True
+    music_state = False
+    music = newMusic
+    music_state = True
     
-#     playMusic()
+    playMusic()
 
 
 def endMusic():
     global music_state
     music_state = False
+    pygame.mixer.music.stop()
+    return
 
 def main():
     playMusic()

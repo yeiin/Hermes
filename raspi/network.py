@@ -92,19 +92,23 @@ def receive():
         #     else:
         #         baby.joinThread("lamp")
                 
-        elif data == b'\x00\x015\x00\x015':
+        elif data == b'\x00\x0255':
             print("music a")
             
-            if(baby.thread_state == True):
+            if music.music_state == True:
+                music.changeMusic("a")
+            elif(baby.thread_state == True):
                 baby.makeThread("music")
             else:
                 baby.makeThread("music") 
                 baby.thread_state = True
             music.music = "a"
             
-        elif data == b'\x00\x015\x00\x015\x00\x015':
+        elif data == b'\x00\x03555':
             print("music b") 
-            if(baby.thread_state == True):
+            if music.music_state == True:
+                music.changeMusic("b")
+            elif(baby.thread_state == True):
                 baby.makeThread("music")
             else:
                 baby.makeThread("music") 
@@ -114,10 +118,6 @@ def receive():
         elif data == b'\x00\x015':
             print("music stop")
             baby.joinThread("music")
-        # elif data == b'\x00\x016':
-        #     print("voice on")
-        # elif data == b'\x00\x0266':
-        #     print("voice off")
 
         else:
             print(data)

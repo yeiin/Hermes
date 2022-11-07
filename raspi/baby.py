@@ -20,7 +20,12 @@ flag = 0
 
 #baby's status list from camera.py
 #OPEN, CLOSE, EMPTY
-eye_list = [ None for i in range(30) ]
+eye_list = [ None for i in range(100) ]
+
+wlimit = 100
+wcnt = 0
+slimit = 100
+scnt = 0
 
 #previous status
 prev = 0
@@ -38,41 +43,37 @@ music_thd = None
 #status
 STATS = None
 
-class Status:
+def asleep():
+    STATS = constant.ASLEEP
+    # GPIO 가동 down
 
+def wake():
     global STATS
+    STATS = constant.WAKE
 
-    def __init__(self):
-        self.wlimit = 100
-        self.wcnt = 0
-        self.slimit = 100
-        self.scnt = 0
-    
-    def wakecounter(self):
-        self.wcnt += 1
-        STATS = 'WCHECK'
-        if self.wcnt == self.wlimit:
-            self.wcnt = 0
-            self.wake() # GPIO 가동 up
+def sleep():
+    global STATS
+    STATS = constant.SLEEP
+
+def wakecounter():
+    global wcnt
+    global wlimit
+    global STATS
+    wcnt += 1
+    STATS = constant.WCHECK
+    if wcnt == wlimit:
+        wcnt = 0
+        wake() # GPIO 가동 up
            
-    def sleepcounter(self):
-        self.scnt += 1
-        STATS = 'SCHECK'
-        if self.scnt == self.slimit:
-            self.scnt = 0
-            self.sleep()# GPIO stop
-
-    def asleep(self):
-        STATS = 'ASLEEP'
-        # GPIO 가동 down
-
-    def wake(self):
-        STATS = 'WAKE'
-
-    def sleep(self):
-        STATS = 'SLEEP'
-
-s = Status()
+def sleepcounter():
+    global scnt
+    global slimit
+    global STATS
+    scnt += 1
+    STATS = constant.SCHECK
+    if scnt == slimit:
+        scnt = 0
+        sleep()# GPIO stop
 
 def rateCalculator(): #opening eyes rate calculator
     global eye_list
@@ -81,13 +82,10 @@ def rateCalculator(): #opening eyes rate calculator
 
     count0 = eye_list.count(constant.OPEN) #open
     count1 = eye_list.count(constant.CLOSE) #close
-    
-    
+      
     if count0 != 0 or count1 != 0:
         rate = count0/(count0 + count1)
         
-    print("open", count0, "close", count1, "rate", rate)
-    
     return rate
 
 def eyeController():
@@ -99,94 +97,100 @@ def eyeController():
     global prev
     global STATS
     global flag
-    
+    global scnt
+    global slimit
+    global wcnt
+    global wlimit
+
     count0 = eye_list.count(constant.OPEN) #open
     count1 = eye_list.count(constant.CLOSE) #close
     
     if count0 != 0 and count1 != 0:
-        if INIT_STATS != 'NONE':
-            INIT_STATS = baby
-        flag = 1
+        if baby == constant.WAKE or baby == constant.SLEEP:
+            if INIT_STATS != constant.NONE:
+                INIT_STATS = baby
+            flag = 1
     
     rate = rateCalculator()
     
     # print("rate", rate, "init stats", INIT_STATS)
-    print("eye list: ", eye_list)
     if(eye_list[len(eye_list)-1] == constant.EMPTY and flag == 0): #baby detection failed
-        print("rate", rate, "init stats", INIT_STATS, "baby isn't detected")
+        print("baby isn't detected")
         exist_cnt = exist_cnt + 1
         if exist_cnt == 10:
-            STATS = 'EXIT'
+            STATS = constant.NONE
             baby = constant.NONE
             exist_cnt = 0
     else: #baby detected:
-        if rate >= 0.85:
-            print("rate", rate, "init stats", INIT_STATS,"baby is waken")
+        if eye_list.count(constant.EMPTY) == 15:
+            print("it is time to exit")
+            STATS = constant.NONE
+            baby = constant.NONE
+        if rate >= 0.8:
+            print("baby is waken")
             baby = constant.WAKE
             INIT_STATS = constant.WAKE
-            s.wakecounter()
+            wakecounter()
             prev = 1
-        elif rate >= 0.1:
+        elif rate >= 0.4:
             if INIT_STATS == constant.SLEEP:
-                print("rate", rate, "init stats", INIT_STATS,"baby is awaked!!")
+                print("baby is awaked!!")
                 baby = constant.AWAKE
-                if STATS == "SCHECK":
-                    s.scnt = 0 # SLEEP 임계값 체크 중인데 AWAKE라면 cnt 초기화
+                if STATS == constant.SCHECK:
+                    scnt = 0 # SLEEP 임계값 체크 중인데 AWAKE라면 cnt 초기화
 
             elif INIT_STATS == constant.WAKE:
-                print("rate", rate, "init stats", INIT_STATS,"baby is falling asleep")
+                print("baby is falling asleep")
                 baby = constant.ASLEEP
                 if prev == 1:
-                    s.asleep() # 졸린 첫 순간, 순차적으로 GPIO 가동
-                if STATS == "WCHECK":
-                    s.wcnt = 0 # WAKE 임계값 체크 중인데 ASLEEP라면 cnt 초기화
+                    asleep() # 졸린 첫 순간, 순차적으로 GPIO 가동
+                if STATS == constant.WCHECK:
+                    wcnt = 0 # WAKE 임계값 체크 중인데 ASLEEP라면 cnt 초기화
 
         else:
-            print("rate", rate, "init stats", INIT_STATS, "baby is sleeping")
+            print("baby is sleeping")
             baby = constant.SLEEP    
             INIT_STATS = constant.SLEEP  
-            s.sleepcounter()
+            sleepcounter()
 
 def statusController():
 
-    global STATS
-    
-    
-    if STATS == 'WAKE':
+    global STATS, thread_state, mobile_thd, led_thd, music_thd, lamp_thd
+
+    if STATS == constant.WAKE:
         # print("WAKE")
         # 애기 완전히 깸. GPIO UP
+        print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`")
+        if(mobile_thd == None):
+                mobile_thd = threading.Thread(target=mobile.mobile)
+                mobile_thd.start() 
+                mobile.mobile_state = True 
         
-        if(thread_state == False):
-            if(mobile_thd == None):
-                    mobile_thd = threading.Thread(target=mobile.main)
-                    mobile_thd.start() 
-                    mobile.mobile_state = True 
-            
-            if(led_thd == None):
-                    led_thd = threading.Thread(target=led.randomLight)
-                    led_thd.start()
-                    led.power = True
-            
-            if(music_thd == None):
-                    music_thd = threading.Thread(target=music.playMusic)
-                    music_thd.start()
-                    music.music = "a"
-                    music.music_state = True 
-            
-            if(lamp_thd == None):
-                    lamp_thd = threading.Thread(target=led.lampLightOn)
-                    lamp_thd.start()
-                    led.lamp_power = True 
-            thread_state = True
+        if(led_thd == None):
+                led_thd = threading.Thread(target=led.randomLight)
+                led_thd.start()
+                led.power = True
+        
+        if(music_thd == None):
+                music_thd = threading.Thread(target=music.playMusic)
+                music_thd.start()
+                music.music = "a"
+                music.music_state = True 
+        
+        if(lamp_thd == None):
+                lamp_thd = threading.Thread(target=led.lampLightOn)
+                lamp_thd.start()
+                led.lamp_power = True 
+        thread_state = True
     
-    if STATS == 'SLEEP':
+    if STATS == constant.SLEEP:
         # print("SLEEP")
         # 애기 완전히 잠들었음. GPIO stop
-        
+        print("|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||")
         if(thread_state == True):
             joinGpioThread()
 
-    if STATS == 'ASLEEP':
+    if STATS == constant.ASLEEP:
         # print("ASLEEP")
         
         if(music_thd == None):
@@ -197,7 +201,7 @@ def statusController():
         
         if(lamp_thd != None):
             led.lightOff()
-            
+        
         # 애기 잠드려고 함. GPIO DOWN
         
 
@@ -216,7 +220,7 @@ def makeThread(thd):
         lamp_thd.start()
      
     elif(thd == "mobile"):
-        mobile_thd = threading.Thread(target=mobile.main) 
+        mobile_thd = threading.Thread(target=mobile.mobile) 
         mobile.mobile_state = True
         mobile_thd.start()
 
@@ -248,7 +252,7 @@ def joinThread(thd):
         mobile_thd = None
         
     elif(thd == "music" and music_thd != None):
-        music.music_state = False
+        music.endMusic()
         music_thd.join()
         music_thd = None
 
@@ -284,10 +288,10 @@ def main():
     global led_thd, lamp_thd, mobile_thd, music_thd
     while(1):
         try:
+            print("main main main main main main")
             eyeController()
             statusController()
-            
-            
+          
             print()
             
             if(led_thd == None and lamp_thd == None and mobile_thd == None and music_thd == None):

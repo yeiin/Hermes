@@ -119,7 +119,7 @@ def main():
                     # cv.putText(frame, f'ratio {ratio}', (100, 100), FONTS, 1.0, utils.GREEN, 2)
                     utils.colorBackgroundText(frame,  f'Ratio : {round(ratio,2)}', FONTS, 0.7, (30,100),2, utils.PINK, utils.YELLOW)
 
-                    if ratio >5.5: #eye closed
+                    if ratio >4.5: #eye closed
                         CEF_COUNTER +=1
                         # cv.putText(frame, 'Blink', (200, 50), FONTS, 1.3, utils.PINK, 2)
                         utils.colorBackgroundText(frame,  f'Blink', FONTS, 1.7, (int(frame_height/2), 100), 2, utils.YELLOW, pad_x=6, pad_y=6, )

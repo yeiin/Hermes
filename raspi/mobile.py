@@ -28,6 +28,7 @@ def mobile():
     global StepCounter
     try:
         while mobile_state:                            # 무한 반복
+
             for pin in range(0, 4):
                 xpin = StepPins[pin]
 
@@ -51,18 +52,3 @@ def mobile():
     except KeyboardInterrupt:   # Ctrl+c => 종료
         GPIO.cleanup()
         
-        
-def main():
-    global mobile_state
-    
-    try:
-        if(baby.thread_state==True):
-            mobile_state = True
-        mobile()
-    except KeyboardInterrupt:
-        print(">>>>>>>>>>>>>>>>>>>>>>mobile")
-        
-    
-        
-if __name__ == "__main__":
-	main()

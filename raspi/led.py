@@ -19,15 +19,15 @@ GPIO.setup(LED1, GPIO.OUT)
 GPIO.setup(LED2, GPIO.OUT)
 GPIO.setup(LAMP, GPIO.OUT)
 
-pwm1 = GPIO.PWM(LED1,50) #50hz  
-pwm2 = GPIO.PWM(LED2,50) #50hz  
+# pwm1 = GPIO.PWM(LED1,50) #50hz  
+# pwm2 = GPIO.PWM(LED2,50) #50hz  
 pwm3 = GPIO.PWM(LAMP, 50)
 
-pwm1.start(0)  
-pwm2.start(0)  
+# pwm1.start(0)  
+# pwm2.start(0)  
 pwm3.start(0)
 
-dc = 0
+# dc = 0
 lamp_dc = 0
 power = False
 lamp_power = False
@@ -66,15 +66,19 @@ def randomLight():
         light = random.choice(light_list)
         dc = 100
         if(light==LED1):
-            pwm1.ChangeDutyCycle(dc)
+            GPIO.output(LED1, GPIO.HIGH)
+            # pwm1.ChangeDutyCycle(dc)
             time.sleep(2)
             dc = 0
-            pwm1.ChangeDutyCycle(dc)
+            GPIO.output(LED1, GPIO.LOW)
+            # pwm1.ChangeDutyCycle(dc)
         elif(light==LED2):
-            pwm2.ChangeDutyCycle(dc) 
+            # pwm2.ChangeDutyCycle(dc)
+            GPIO.output(LED2, GPIO.HIGH) 
             time.sleep(2)
             dc = 0
-            pwm2.ChangeDutyCycle(dc)
+            # pwm2.ChangeDutyCycle(dc)
+            GPIO.output(LED2, GPIO.LOW)
             
     
 
@@ -88,3 +92,10 @@ def changLampDutyCycle(mode):
         if(lamp_dc<=90):
             lamp_dc += 10
             pwm3.ChangeDutyCycle(lamp_dc)
+
+
+def main():
+    randomLight()
+
+if __name__ == "__main__":
+	main()
