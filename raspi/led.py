@@ -3,7 +3,7 @@ os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 import RPi.GPIO as GPIO
 import time
 import random
-import baby
+
 import constant 
 
 GPIO.setmode(GPIO.BCM)
@@ -36,26 +36,33 @@ def lampLightOn():
     global dc, lamp_power, lamp_dc
     lamp_power = True
 
-    lamp_dc = 100
+    lamp_dc = 0
     pwm3.ChangeDutyCycle(lamp_dc)
     
     while lamp_power:
         if(lamp_dc<=90):
             lamp_dc += 10
+            print(lamp_dc)
             pwm3.ChangeDutyCycle(lamp_dc)
-        time.sleep(2)
+        time.sleep(0.1)
     
+def lampOff():
+    global lamp_dc
+    print(">>off")
+    lamp_dc = 0
+    pwm3.ChangeDutyCycle(lamp_dc)
 
-
-
-def lightOff():
+def lampLightOff():
     global lamp_dc, lamp_power
     
     while lamp_dc:
+        lamp_dc-=10
+        print("lamp dc", lamp_dc)
         pwm3.ChangeDutyCycle(lamp_dc)
         time.sleep(2)
     
     lamp_power = False
+    print("lamp end")
     return
         
 
@@ -79,6 +86,7 @@ def randomLight():
             dc = 0
             # pwm2.ChangeDutyCycle(dc)
             GPIO.output(LED2, GPIO.LOW)
+    print("end LED")
             
     
 
@@ -94,8 +102,9 @@ def changLampDutyCycle(mode):
             pwm3.ChangeDutyCycle(lamp_dc)
 
 
-def main():
-    randomLight()
+# def main():
+#     lampLightOn()
+#     lampOff()
 
-if __name__ == "__main__":
-	main()
+# if __name__ == "__main__":
+# 	main()

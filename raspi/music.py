@@ -18,6 +18,7 @@ def playMusic():
     pygame.mixer.music.play()
 
     while pygame.mixer.music.get_busy() == True and music_state == True:
+        print(music, "is!")
         continue
 
 
@@ -36,6 +37,7 @@ def endMusic():
     global music_state
     music_state = False
     pygame.mixer.music.stop()
+    print("ends")
     return
 
 def main():
