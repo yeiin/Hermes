@@ -3,6 +3,7 @@ os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 import RPi.GPIO as GPIO
 import time
 import random
+import baby
 import constant 
 
 GPIO.setmode(GPIO.BCM)
@@ -29,44 +30,33 @@ pwm3.start(0)
 dc = 0
 lamp_dc = 0
 power = False
+lamp_power = False
 
-def lightOn(light):
-    global dc, power, lamp_dc
-    power = True
-   
-    if(light==LED1):
-        dc = 100
-        pwm1.ChangeDutyCycle(dc)
-        lighting()
-    elif(light==LED2):
-        dc = 100
-        pwm2.ChangeDutyCycle(dc)
-        lighting()
-    elif(light==LAMP):
-        lamp_dc = 100
-        pwm3.ChangeDutyCycle(lamp_dc)
-        lighting()
-    
-    
-def lightOff(light):
-    global dc, power, lamp_dc
-    dc = 0
-    power = False
-    
-    if(light==LED1):
-        dc = 0
-        pwm1.ChangeDutyCycle(dc)
-    elif(light==LED2):
-        dc = 0
-        pwm2.ChangeDutyCycle(dc)
-    elif(light==LAMP):
-        lamp_dc = 0
-        pwm3.ChangeDutyCycle(lamp_dc)
+def lampLightOn(): 
+    global dc, lamp_power, lamp_dc
+    lamp_power = True
 
-def lighting():
-    global power
-    while power:           
-        time.sleep(1)
+    lamp_dc = 100
+    pwm3.ChangeDutyCycle(lamp_dc)
+    
+    while lamp_power:
+        if(lamp_dc<=90):
+            lamp_dc += 10
+            pwm3.ChangeDutyCycle(lamp_dc)
+        time.sleep(2)
+    
+
+
+
+def lightOff():
+    global lamp_dc, lamp_power
+    
+    while lamp_dc:
+        pwm3.ChangeDutyCycle(lamp_dc)
+        time.sleep(2)
+    
+    lamp_power = False
+    return
         
 
 def randomLight():
@@ -85,24 +75,16 @@ def randomLight():
             time.sleep(2)
             dc = 0
             pwm2.ChangeDutyCycle(dc)
+            
     
 
 def changLampDutyCycle(mode):
     global lamp_dc
-    if(mode == 0):   
+    if(mode == 0):   #dark
         if(lamp_dc >= 10):
             lamp_dc -= 10
             pwm3.ChangeDutyCycle(lamp_dc)
-    else:
+    else: #bright
         if(lamp_dc<=90):
             lamp_dc += 10
             pwm3.ChangeDutyCycle(lamp_dc)
-
-def main():
-    try:
-        randomLight()
-    except KeyboardInterrupt:
-        print(">>>>>>>>>>>led")
-
-if __name__ == "__main__":
-	main() 

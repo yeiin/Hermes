@@ -56,7 +56,7 @@ def main():
     global mobile_state
     
     try:
-        if(baby.state==True):
+        if(baby.thread_state==True):
             mobile_state = True
         mobile()
     except KeyboardInterrupt:

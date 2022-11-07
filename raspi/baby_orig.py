@@ -2,7 +2,7 @@ import constant
 import threading
 import led
 import mobile
-import audio
+import raspi.music as music
 import time
 
 
@@ -68,7 +68,7 @@ def main():
                 print("make gpio thread")
                 ledt = threading.Thread(target=led.main)
                 mobilet = threading.Thread(target=mobile.main)
-                audiot = threading.Thread(target=audio.playMusic)
+                audiot = threading.Thread(target=music.playMusic)
                 state = True
                 ledt.start()
                 mobilet.start()
@@ -89,7 +89,7 @@ def joinGpioThread(ledt, mobilet, audiot):
     led.power = False
     ledt.join()
     mobilet.join()
-    audio.end = True
+    music.music_state = True
     audiot.join() 
     return 
             

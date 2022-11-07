@@ -20,8 +20,8 @@ def main():
 		global flag_exit
 		flag_exit = True
 
-		if(baby.state == True):
-			baby.joinGpioThread(baby.ledt, baby.mobilet,baby.audiot)
+		if(baby.thread_state == True):
+			baby.joinGpioThread()
 		network.close()
 		join(t1, t2, t3)
 

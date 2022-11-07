@@ -2,7 +2,7 @@ import socket
 import baby
 import led
 import mobile
-import audio
+import music
 import constant
 import threading
 import time
@@ -38,35 +38,89 @@ def receive():
         
         data = client_socket.recv(1024)
         
+        print(">>>>>>>>>>>>>>>>>>>>>>>>data is ", data.decode())
+        
         if not data:
             break
         
         if data == b'\x00\x012':
             print("mobile on")
-            
-            if(baby.state == True):
-                mobile.mobile_state = True
+
+            if(baby.thread_state == True):
+                baby.makeThread("mobile")
             else:
-                baby.state = True
-                mobile.mobile_state = True
+                baby.makeThread("mobile") 
+                baby.thread_state = True
+                
         elif data == b'\x00\x0222':
             print("mobile off")
+            baby.joinThread("mobile")
+            
         elif data == b'\x00\x013':
             print("led on")
+            #need
+            if(baby.thread_state == True):
+                baby.makeThread("led")
+            else:
+                baby.makeThread("led") 
+                baby.thread_state = True
+            
         elif data == b'\x00\x0233':
             print("led off")
-        elif data == b'\x00\x014':
-            print("illuminance on")
-        elif data == b'\x00\x0244':
-            print("illuminance off")
+            baby.joinThread("led")
+            
+        # elif data == b'\x00\x014':
+        #     print("illuminance on")
+        
+        #     if baby.thread_state == True:
+        #         if baby.lamp_thd == None:
+        #             baby.makeThread("lamp")
+        #         else:
+        #             led.changLampDutyCycle(1)
+        #     else:
+        #         if baby.lamp_thd == None:
+        #             baby.makeThread("lamp")
+        #         else:
+        #             led.changLampDutyCycle(1)
+        #         baby.thread_state = True
+                 
+        # elif data == b'\x00\x0244':
+        #     print("illuminance off")
+            
+        #     if led.lamp_dc >= 10:
+        #         led.changLampDutyCycle(0)
+        #     else:
+        #         baby.joinThread("lamp")
+                
+        elif data == b'\x00\x015\x00\x015':
+            print("music a")
+            
+            if(baby.thread_state == True):
+                baby.makeThread("music")
+            else:
+                baby.makeThread("music") 
+                baby.thread_state = True
+            music.music = "a"
+            
+        elif data == b'\x00\x015\x00\x015\x00\x015':
+            print("music b") 
+            if(baby.thread_state == True):
+                baby.makeThread("music")
+            else:
+                baby.makeThread("music") 
+                baby.thread_state = True
+            music.music = "b"
+            
         elif data == b'\x00\x015':
-            print("music on")
-        elif data == b'\x00\x0255':
-            print("music off")
-        elif data == b'\x00\x016':
-            print("voice on")
-        elif data == b'\x00\x0266':
-            print("voice off")
+            print("music stop")
+            baby.joinThread("music")
+        # elif data == b'\x00\x016':
+        #     print("voice on")
+        # elif data == b'\x00\x0266':
+        #     print("voice off")
+
+        else:
+            print(data)
         
  
 def send():   
@@ -79,6 +133,8 @@ def send():
             msg = "0"
         elif(baby.baby == constant.SLEEP):
             msg = "2"
+        elif(baby.baby == constant.NONE):
+            msg = "4"
         else:
             msg = "3"
         
@@ -92,13 +148,19 @@ def send():
         else:
             msg = msg + "0"
         
-        if audio.end == False:
+        if music.music_state == True:
             msg = msg + "1"
         else:
+            print(">>>>>>>>>>>>>>>must be here")
             msg = msg + "0"
-        msg = msg + "{}".format(int(led.lamp_dc/10))
+        
+        if led.lamp_dc == 10:
+            msg = msg + "A"
+        else:
+            msg = msg + "{}".format(int(led.lamp_dc/10))
+            
         msg += "0"
-        print(">>>>>>>>>>>>>>>>>>>>>>>>send msg", msg)
+        # print(">>>>>>>>>>>>>>>>>>>>>>>>send msg", msg)
         client_socket.sendall(msg.encode())
         
         time.sleep(1)
