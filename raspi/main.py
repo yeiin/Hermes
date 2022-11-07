@@ -3,8 +3,6 @@ import time
 import baby
 import camera
 import network
-
-
  
 def main():
 	try:
@@ -19,7 +17,6 @@ def main():
 			time.sleep(0.1)
 	
 	except KeyboardInterrupt:
-		print("Ctrl+C Pressed.")
 		global flag_exit
 		flag_exit = True
 

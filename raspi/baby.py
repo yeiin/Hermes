@@ -110,6 +110,7 @@ def main():
                 state = False
                 joinGpioThread(ledt, mobilet, audiot)
         except KeyboardInterrupt:
+            print(">>>>>>>>>>>>>>>>>>>>>>>>>>>.baby interrupt")
             joinGpioThread(ledt, mobilet, audiot)
             
 

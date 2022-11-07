@@ -29,6 +29,7 @@ def init():
     server_socket.listen()
 
     client_socket, addr = server_socket.accept()
+    print(">>>>>>>>>>>>>>client", client_socket)
 
 def receive():
     global code, client_socket, addr
@@ -42,6 +43,12 @@ def receive():
         
         if data == b'\x00\x012':
             print("mobile on")
+            
+            if(baby.state == True):
+                mobile.mobile_state = True
+            else:
+                baby.state = True
+                mobile.mobile_state = True
         elif data == b'\x00\x0222':
             print("mobile off")
         elif data == b'\x00\x013':
@@ -66,10 +73,14 @@ def send():
     global msg, client_socket
     
     while 1:
-        if baby.baby == constant.WAKE:
+        if baby.baby == constant.AWAKE:
             msg = "1"
-        else:
+        elif(baby.baby == constant.ASLEEP):
             msg = "0"
+        elif(baby.baby == constant.SLEEP):
+            msg = "2"
+        else:
+            msg = "3"
         
         if mobile.mobile_state == True:
             msg = msg + "1"
@@ -81,17 +92,15 @@ def send():
         else:
             msg = msg + "0"
         
-        #illu
-        msg += "1"
-        
         if audio.end == False:
             msg = msg + "1"
         else:
             msg = msg + "0"
-        # voice
-        msg += "1"
-        print(">>>>>>>>>>>>>>>>>>>>>>>>msg", msg)
-        client_socket.sendall(msg.encode('utf-8'))
+        msg = msg + "{}".format(int(led.lamp_dc/10))
+        msg += "0"
+        print(">>>>>>>>>>>>>>>>>>>>>>>>send msg", msg)
+        client_socket.sendall(msg.encode())
+        
         time.sleep(1)
     
     
@@ -124,7 +133,6 @@ def main():
             time.sleep(1)
     
     except KeyboardInterrupt:
-        print("Ctrl+C Pressed.")
         close()
 
 if __name__ == "__main__":

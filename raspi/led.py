@@ -90,16 +90,19 @@ def randomLight():
 def changLampDutyCycle(mode):
     global lamp_dc
     if(mode == 0):   
-        if(lamp_dc >= 5):
-            lamp_dc -= 5
+        if(lamp_dc >= 10):
+            lamp_dc -= 10
             pwm3.ChangeDutyCycle(lamp_dc)
     else:
-        if(lamp_dc<=95):
-            lamp_dc += 5
+        if(lamp_dc<=90):
+            lamp_dc += 10
             pwm3.ChangeDutyCycle(lamp_dc)
 
 def main():
-    randomLight()
+    try:
+        randomLight()
+    except KeyboardInterrupt:
+        print(">>>>>>>>>>>led")
 
 if __name__ == "__main__":
 	main() 

@@ -27,7 +27,7 @@ Seq =  [[0,0,0,100],
 def mobile():
     global StepCounter
     try:
-        while 1:                            # 무한 반복
+        while mobile_state:                            # 무한 반복
             for pin in range(0, 4):
                 xpin = StepPins[pin]
 
@@ -54,10 +54,15 @@ def mobile():
         
 def main():
     global mobile_state
-    if(baby.state==True):
-        mobile_state = True
+    
+    try:
+        if(baby.state==True):
+            mobile_state = True
+        mobile()
+    except KeyboardInterrupt:
+        print(">>>>>>>>>>>>>>>>>>>>>>mobile")
         
-    mobile()
+    
         
 if __name__ == "__main__":
 	main()
