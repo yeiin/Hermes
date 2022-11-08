@@ -21,7 +21,7 @@
 ## Environment
  각자 환경 넣기.
  os compiler cpu ram
-</br> Choi Yunseo : camera detecting, realtime status judgement, 3D print </br>
+</br></br> Choi Yunseo : camera detecting, realtime status judgement, 3D print </br>
 os : Mac OS</br>
 code editor : VScode with ssh connection to pi</br>
 cpu : Apple M1</br>
