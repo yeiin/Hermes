@@ -41,13 +41,13 @@
 ## Reference
 참고 내용
 
-1. Camera detecting (camera.py)
-(1) MediaPipe facemesh https://google.github.io/mediapipe/solutions/face_mesh.html</br>
+1. Camera detecting (camera.py)</br>
+(1) MediaPipe facemesh</br> https://google.github.io/mediapipe/solutions/face_mesh.html</br>
 (2) openCV with haarcascade ( less accurate than (1) )</br>
-2. 3D model printing
+2. 3D model printing</br>
  [ Cubicon style-plus / Suwon Makerspace ]</br>
 (1) Raspberry Pi 4B TURBO case With Integrated Camera Module</br>
-https://www.youtube.com/watch?v=kXgKs1Zv43U
-https://www.thingiverse.com/thing:4912025
+https://www.youtube.com/watch?v=kXgKs1Zv43U</br>
+https://www.thingiverse.com/thing:4912025</br>
 (2) LED lamp</br>
 https://www.thingiverse.com/thing:1531729
