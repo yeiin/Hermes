@@ -96,9 +96,9 @@ encoding : utf-8 </br>
 # Dependency
 ### Raspberry Pi
 > Open CV 
->> opencv-python : 4.6.0.66
->> mediapipe-rpi4 : 0.8.8
->> Python : 3.7.3 
+>> opencv-python : 4.6.0.6</br>
+>> mediapipe-rpi4 : 0.8.8</br>
+>> Python : 3.7.3
 >> etc.
 
 ### Android
