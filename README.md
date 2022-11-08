@@ -5,6 +5,18 @@
 # About The Project
 > Parenting Multitask Helper with Open CV
 
+<div>
+    <img src="https://img.shields.io/badge/Android%20Studio-3DDC84?style=flat&logo=Android%20Studio&logoColor=white"/>
+    <img src="https://img.shields.io/badge/Java-007396?style=flat&logo=Java&logoColor=white" />
+    <img src="https://img.shields.io/badge/Python-3776AB?style=flat&logo=Python&logoColor=white"/>
+    <img src="https://img.shields.io/badge/OpenCV-5C3EE8?style=flat&logo=OpenCV&logoColor=white"/>
+    <img src="https://img.shields.io/badge/TensorFlow-FF6F00?style=flat&logo=TensorFlow&logoColor=white"/>
+    <img src="https://img.shields.io/badge/Raspberry%20Pi-A22846?style=flat&logo=Raspberry%20Pi&logoColor=white"/>
+    <img src="https://img.shields.io/badge/Flask-000000?style=flat&logo=Flask&logoColor=white"/>
+    <img src="![readme_app_1](https://user-images.githubusercontent.com/100847440/200597432-03ac2e1d-6ccd-47c4-9786-a2e4edf24b2b.jpeg)"/>
+<img src="![readme_app_2](https://user-images.githubusercontent.com/100847440/200597460-9160d898-30cd-42e7-93db-ceedfff15560.jpeg)"/>
+</div>
+
 # Directory
 ```
 .
@@ -130,17 +142,7 @@
 42 directories, 76 files
 
 ```
-<div>
-    <img src="https://img.shields.io/badge/Android%20Studio-3DDC84?style=flat&logo=Android%20Studio&logoColor=white"/>
-    <img src="https://img.shields.io/badge/Java-007396?style=flat&logo=Java&logoColor=white" />
-    <img src="https://img.shields.io/badge/Python-3776AB?style=flat&logo=Python&logoColor=white"/>
-    <img src="https://img.shields.io/badge/OpenCV-5C3EE8?style=flat&logo=OpenCV&logoColor=white"/>
-    <img src="https://img.shields.io/badge/TensorFlow-FF6F00?style=flat&logo=TensorFlow&logoColor=white"/>
-    <img src="https://img.shields.io/badge/Raspberry%20Pi-A22846?style=flat&logo=Raspberry%20Pi&logoColor=white"/>
-    <img src="https://img.shields.io/badge/Flask-000000?style=flat&logo=Flask&logoColor=white"/>
-    <img src="![readme_app_1](https://user-images.githubusercontent.com/100847440/200597432-03ac2e1d-6ccd-47c4-9786-a2e4edf24b2b.jpeg)"/>
-<img src="![readme_app_2](https://user-images.githubusercontent.com/100847440/200597460-9160d898-30cd-42e7-93db-ceedfff15560.jpeg)"/>
-</div>
+
 
 
 # Environment
@@ -154,20 +156,27 @@ Linux version 5.15.76-v7l+ (dom@buildbot) (arm-linux-gnueabihf-gcc-8 (Ubuntu/Lin
 
 
 ## android
- 
-
-
- 
-# Prerequisite
-필요한 package 적기
-</br></br> Choi Yunseo : camera detecting, realtime status judgement, 3D print </br>
-camera detecting : OpenCV, MediaPipe etc.
+#### build.gradle
+'com.android.application': version '7.3.0' </br>
+'com.android.library' : version '7.3.0' </br>
 </br>
+Compile SDK : 32</br>
+min SDK : 21</br>
+target SDK : 32</br>
+Java Version : VERSION_1_8 </br>
+</br>
+xml version : 1.0 </br>
+encoding : utf-8 </br>
 
-# Files
-각 파일들이 어떻게 돌아가는 지 간단 정리</br>
-간단한 사용 방법 및 예제</br>
-프로젝트 경과</br>
+ 
+
+
+ 
+# Dependency
+camera detecting, realtime status judgement, 3D print </br>
+camera detecting : OpenCV, MediaPipe etc.</br>
+
+# Project
 
 ### Facial detection
 #### camera.py & baby.py
@@ -188,40 +197,38 @@ camera.py put baby's state in queue.</br>
 
 </br> count rate = Open/Queue's size</br>
 
-#### count rate
+|count rate|----|
 |Wake|>=0.8|
-|-----|-----|
 |ASLEEP|>=0.4 and Init stat = Wake|
 |AWAKE| >=0.4 and Init stat = Sleep|
 |Sleep|else|
 |None|No detect above threshold|
 
+</br>
 > Init stat only can be Wake/Sleep
 >> If baby is wake, blink count decreasing, it goes Asleep.</br>
 >> If baby is sleep, blink ocunt increasing, it goes Awake.</br>
+</br>
 
 #### Final result using for GPIO
 > STATS
 >> Wake, Awake, Asleep, Sleep
 
-
+### Diagram
 <!-- 전체 플로우는 내가 할게 + diagram -->
 
 # Contribute
-각자 자신 연결
 </br>Choi Yunseo : camera detecting, realtime status judgement, 3D print </br>
 </br>
 
 # Usage
-각 코드 들을 어떻게 실행해야하는지
+
 </br> raspi/camera.py : facial detecting with picamera using Mediapipe 
-``` python3 camera.py```
+``` python3 camera.py``` </br>
 </br> raspi/baby.py : realtime baby's status judgement linked with camera.py and Gpio operation </br>
-``` python3 main.py ```
+``` python3 main.py ``` </br>
 
 # Reference
-참고 내용
-
 1. Camera detecting (camera.py)</br>
 (1) MediaPipe facemesh</br> https://google.github.io/mediapipe/solutions/face_mesh.html</br>
 (2) openCV with haarcascade ( less accurate than (1) )</br>
