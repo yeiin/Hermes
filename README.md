@@ -196,17 +196,17 @@ Lee yein : GPIO, socket, overall running of the project</br>
 
 # Usage
 
-</br> raspi/camera.py : facial detecting with picamera using Mediapipe 
+</br> raspi/camera.py : facial detecting with picamera using Mediapipe </br>
 ``` python3 camera.py``` </br>
 </br> raspi/baby.py : realtime baby's status judgement linked with camera.py and Gpio operation </br>
 ``` python3 main.py ``` </br>
-</br> raspi/led.py : led on off, pwm
+</br> raspi/led.py : led on off, pwm</br>
 ``` python3 led.py ``` </br>
-</br> raspi/mobile.py : mobile on off
+</br> raspi/mobile.py : mobile on off</br>
 ``` python3 mobile.py ``` </br>
-</br> raspi/music.py : music on off and change
+</br> raspi/music.py : music on off and change</br>
 ``` python3 music.py ``` </br>
-</br> raspi/network.py : socket and app signal handling
+</br> raspi/network.py : socket and app signal handling</br>
 ``` python3 network.py ``` </br>
 
 # Reference
