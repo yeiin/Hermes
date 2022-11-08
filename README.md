@@ -186,9 +186,6 @@ camera.py put baby's state in queue.</br>
 </br>
 
 
-### Diagram
-<!-- 전체 플로우는 내가 할게 + diagram -->
-
 # Contributor
 Choi Yunseo : camera detecting, realtime status judgement, 3D print </br>
 Lee Jieun : Android application, socket </br>
