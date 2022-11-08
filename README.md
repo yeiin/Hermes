@@ -21,9 +21,15 @@
 ## Environment
  각자 환경 넣기.
  os compiler cpu ram
+</br>yunseo - camera detecting, realtime status judgement, 3D print<br>
+os : Mac OS</br>
+code editor : VScode with ssh connection to pi</br>
+cpu : Apple M1</br>
+ram : 8GB</br></br>
 
 ## Prerequisite
 필요한 package 적기
+
 
 ## Files
 각 파일들이 어떻게 돌아가는 지 간단 정리
