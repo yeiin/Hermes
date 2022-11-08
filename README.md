@@ -21,28 +21,39 @@
 ## Environment
  각자 환경 넣기.
  os compiler cpu ram
-</br></br> Choi Yunseo : camera detecting, realtime status judgement, 3D print </br>
-os : Mac OS</br>
+</br> Choi yunseo </br>
+os : Mac os</br>
 code editor : VScode with ssh connection to pi</br>
 cpu : Apple M1</br>
 ram : 8GB</br></br>
 
 ## Prerequisite
 필요한 package 적기
-
+</br></br> Choi Yunseo : camera detecting, realtime status judgement, 3D print </br>
+camera detecting : OpenCV, MediaPipe etc.
+</br>
 
 ## Files
 각 파일들이 어떻게 돌아가는 지 간단 정리
 간단한 사용 방법 및 예제
+프로젝트 경과
+</br>Camera & Baby</br>![image](https://user-images.githubusercontent.com/52804557/200515596-727b8822-577f-4133-bbe7-aca37f5627e2.png)
+![image](https://user-images.githubusercontent.com/52804557/200515629-8352455f-b82d-4c53-a246-2417f44739b3.png)
+![image](https://user-images.githubusercontent.com/52804557/200515672-f97536ac-747a-4947-abb8-25a3fdef4868.png)
+![image](https://user-images.githubusercontent.com/52804557/200515693-9d824205-b5d9-4606-8e16-16cbb2709ac3.png)
+</br></br>
 
-프로젝트 결과
 전체 플로우는 내가 할게 + diagram
 
 ## Contribute
 각자 자신 연결
+</br>Choi Yunseo : camera detecting, realtime status judgement, 3D print </br>
+</br>
 
 ## Usage
 각 코드 들을 어떻게 실행해야하는지
+</br> raspi/camera.py : facial detecting with picamera</br>'python3 camera.py'
+</br> raspi/baby.py : realtime baby's status judgement linked with camera.py</br>'python3 main.py'
 
 ## Reference
 참고 내용
