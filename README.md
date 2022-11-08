@@ -19,10 +19,10 @@
 
 # Environment
 
-##raspberry pi 4
+## raspberry pi 4
 code editor : VScode with ssh connection to pi</br>
 
-##android
+## android
  
  
  각자 환경 넣기.
@@ -44,13 +44,12 @@ camera detecting : OpenCV, MediaPipe etc.
 간단한 사용 방법 및 예제</br>
 프로젝트 경과</br>
 
-###Facial detection
-Calculate the eye ratio with eye's width and height.
+### Facial detection
+Calculate the eye ratio with eye's width and height.</br>
 |eye ratio|
+|-----|-----|
 |Close|>=4.5|
 |Open|else|
-</br> Close: ratio >= 4.5 </br> Open: else
-
 
 </br>Camera & Baby</br>![image](https://user-images.githubusercontent.com/52804557/200515596-727b8822-577f-4133-bbe7-aca37f5627e2.png)
 ![image](https://user-images.githubusercontent.com/52804557/200515629-8352455f-b82d-4c53-a246-2417f44739b3.png)
