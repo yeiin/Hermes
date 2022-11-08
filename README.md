@@ -45,17 +45,41 @@ camera detecting : OpenCV, MediaPipe etc.
 프로젝트 경과</br>
 
 ### Facial detection
+#### camera.py & baby.py
 Calculate the eye ratio with eye's width and height.</br>
 |eye ratio||
 |-----|-----|
 |Close|>=4.5|
 |Open|else|
 
-</br>Camera & Baby</br>![image](https://user-images.githubusercontent.com/52804557/200515596-727b8822-577f-4133-bbe7-aca37f5627e2.png)
+### Baby Status Judgement
+#### baby.py
+camera.py put baby's state in queue.</br>
+|Open|0|
+|----|----|
+|Close|1|
+</br> count rate = Open/Queue's size
+|count rate||
+|-----|-----|
+|Wake|>=0.8|
+|ASLEEP|>=0.4 and Init stat = Wake|
+|AWAKE| >=0.4 and Init stat = Sleep|
+|Sleep|else|
+|None|No detect above threshold|
+
+> Init stat only can be Wake/Sleep
+>> If baby is wake, blink count decreasing, it goes Asleep.
+>> If baby is sleep, blink ocunt increasing, it goes Awake.
+
+#### Final result using for GPIO
+> STATS
+>> Wake, Awake, Asleep, Sleep
+
+<!-- </br>Camera & Baby</br>![image](https://user-images.githubusercontent.com/52804557/200515596-727b8822-577f-4133-bbe7-aca37f5627e2.png)
 ![image](https://user-images.githubusercontent.com/52804557/200515629-8352455f-b82d-4c53-a246-2417f44739b3.png)
 ![image](https://user-images.githubusercontent.com/52804557/200515672-f97536ac-747a-4947-abb8-25a3fdef4868.png)
 ![image](https://user-images.githubusercontent.com/52804557/200515693-9d824205-b5d9-4606-8e16-16cbb2709ac3.png)
-</br></br>
+</br></br> -->
 
 전체 플로우는 내가 할게 + diagram
 
