@@ -152,6 +152,7 @@ camera.py put baby's state in queue.</br>
 ### GPIO with baby status
 
 > No APP Signal
+
 |BABY|GPIO|
 |:----|:----|
 |WAKE|LED ON, Mobile On, Music on, Lamp more bright|
