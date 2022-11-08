@@ -35,10 +35,7 @@ def receive():
     global code, client_socket, addr
     
     while True:
-        
         data = client_socket.recv(1024)
-        
-        print(">>>>>>>>>>>>>>>>>>>>>>>>data is ", data.decode())
         
         if not data:
             break
@@ -57,7 +54,6 @@ def receive():
             baby.joinThread("mobile")
             
         elif data == b'\x00\x013':
-            print("led on")
             #need
             if(baby.thread_state == True):
                 baby.makeThread("led")
@@ -66,35 +62,9 @@ def receive():
                 baby.thread_state = True
             
         elif data == b'\x00\x0233':
-            print("led off")
             baby.joinThread("led")
-            
-        # elif data == b'\x00\x014':
-        #     print("illuminance on")
-        
-        #     if baby.thread_state == True:
-        #         if baby.lamp_thd == None:
-        #             baby.makeThread("lamp")
-        #         else:
-        #             led.changLampDutyCycle(1)
-        #     else:
-        #         if baby.lamp_thd == None:
-        #             baby.makeThread("lamp")
-        #         else:
-        #             led.changLampDutyCycle(1)
-        #         baby.thread_state = True
-                 
-        # elif data == b'\x00\x0244':
-        #     print("illuminance off")
-            
-        #     if led.lamp_dc >= 10:
-        #         led.changLampDutyCycle(0)
-        #     else:
-        #         baby.joinThread("lamp")
                 
         elif data == b'\x00\x0255':
-            print("music a")
-            
             if music.music_state == True:
                 music.changeMusic("a")
             elif(baby.thread_state == True):
@@ -116,11 +86,10 @@ def receive():
             music.music = "b"
             
         elif data == b'\x00\x015':
-            print("music stop")
             baby.joinThread("music")
 
         else:
-            print(data)
+            print(">>>>>>>>>>>>>else data", data)
         
  
 def send():   
@@ -151,7 +120,6 @@ def send():
         if music.music_state == True:
             msg = msg + "1"
         else:
-            print(">>>>>>>>>>>>>>>must be here")
             msg = msg + "0"
         
         if led.lamp_dc == 10:
@@ -160,7 +128,6 @@ def send():
             msg = msg + "{}".format(int(led.lamp_dc/10))
             
         msg += "0"
-        # print(">>>>>>>>>>>>>>>>>>>>>>>>send msg", msg)
         client_socket.sendall(msg.encode())
         
         time.sleep(1)
@@ -170,7 +137,6 @@ def send():
 
 def close():
     global rt, st
-    print(">>>>>>>network join")
     global client_socket, server_socket
     # 소켓을 닫습니다.
     if client_socket != None:

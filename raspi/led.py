@@ -32,6 +32,7 @@ lamp_dc = 0
 power = False
 lamp_power = False
 
+#pwm lamp on
 def lampLightOn(): 
     global dc, lamp_power, lamp_dc
     lamp_power = True
@@ -42,27 +43,27 @@ def lampLightOn():
     while lamp_power:
         if(lamp_dc<=90):
             lamp_dc += 10
-            print(lamp_dc)
             pwm3.ChangeDutyCycle(lamp_dc)
-        time.sleep(0.1)
-    
+        time.sleep(2)
+    return
+
+#lamp off
 def lampOff():
     global lamp_dc
     print(">>off")
-    lamp_dc = 0
-    pwm3.ChangeDutyCycle(lamp_dc)
+    GPIO.output(LAMP, GPIO.LOW)
+    return
 
+#pwm lamp off
 def lampLightOff():
     global lamp_dc, lamp_power
     
     while lamp_dc:
         lamp_dc-=10
-        print("lamp dc", lamp_dc)
         pwm3.ChangeDutyCycle(lamp_dc)
         time.sleep(2)
     
     lamp_power = False
-    print("lamp end")
     return
         
 
@@ -74,37 +75,32 @@ def randomLight():
         dc = 100
         if(light==LED1):
             GPIO.output(LED1, GPIO.HIGH)
-            # pwm1.ChangeDutyCycle(dc)
-            time.sleep(2)
+            time.sleep(1)
             dc = 0
             GPIO.output(LED1, GPIO.LOW)
-            # pwm1.ChangeDutyCycle(dc)
         elif(light==LED2):
-            # pwm2.ChangeDutyCycle(dc)
             GPIO.output(LED2, GPIO.HIGH) 
-            time.sleep(2)
+            time.sleep(1)
             dc = 0
-            # pwm2.ChangeDutyCycle(dc)
             GPIO.output(LED2, GPIO.LOW)
-    print("end LED")
-            
+
     
 
-def changLampDutyCycle(mode):
-    global lamp_dc
-    if(mode == 0):   #dark
-        if(lamp_dc >= 10):
-            lamp_dc -= 10
-            pwm3.ChangeDutyCycle(lamp_dc)
-    else: #bright
-        if(lamp_dc<=90):
-            lamp_dc += 10
-            pwm3.ChangeDutyCycle(lamp_dc)
+# #for network
+# def changLampDutyCycle(mode):
+#     global lamp_dc
+#     if(mode == 0):   #dark
+#         if(lamp_dc >= 10):
+#             lamp_dc -= 10
+#             pwm3.ChangeDutyCycle(lamp_dc)
+#     else: #bright
+#         if(lamp_dc<=90):
+#             lamp_dc += 10
+#             pwm3.ChangeDutyCycle(lamp_dc)
 
 
-# def main():
-#     lampLightOn()
-#     lampOff()
+def main():
+    lampOff()
 
-# if __name__ == "__main__":
-# 	main()
+if __name__ == "__main__":
+	main()

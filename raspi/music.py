@@ -18,7 +18,6 @@ def playMusic():
     pygame.mixer.music.play()
 
     while pygame.mixer.music.get_busy() == True and music_state == True:
-        print(music, "is!")
         continue
 
 
