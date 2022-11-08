@@ -79,7 +79,6 @@ Linux version 5.15.76-v7l+ (dom@buildbot) (arm-linux-gnueabihf-gcc-8 (Ubuntu/Lin
 
 
 ## Android
-#### build.gradle
 'com.android.application': version '7.3.0' </br>
 'com.android.library' : version '7.3.0' </br>
 </br>
@@ -173,12 +172,12 @@ camera.py put baby's state in queue.</br>
 ### Andriod App
 |State Notification and Control||
 |:------------------------------|:----------------------|
-|State of Baby|Asleep or Awake or Sleep or Wake or Detect X|
-|Mobile|ON or OFF|
-|LED|ON or OFF|
-|Music|Play or Stop and choose music|
+|State of Baby|Asleep / Awake / Sleep / Wake / Detect X|
+|Mobile|ON / OFF|
+|LED|ON / OFF|
+|Music|Play / Stop & choose music|
 |Illuminance|Level 0 - 10|
-|Mode|Auto or User|
+|Mode|Auto / User|
 
 </br>
 
