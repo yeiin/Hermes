@@ -46,7 +46,7 @@ camera detecting : OpenCV, MediaPipe etc.
 
 ### Facial detection
 Calculate the eye ratio with eye's width and height.</br>
-|eye ratio|
+|eye ratio||
 |-----|-----|
 |Close|>=4.5|
 |Open|else|
