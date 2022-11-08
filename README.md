@@ -38,3 +38,16 @@
 ## Usage
 각 코드 들을 어떻게 실행해야하는지
 
+## Reference
+참고 내용
+
+1. Camera detecting (camera.py)
+(1) MediaPipe facemesh https://google.github.io/mediapipe/solutions/face_mesh.html
+(2) openCV with haarcascade ( less accurate than (1) )
+2. 3D model printing
+ [ Cubicon style-plus / Suwon Makerspace ]
+(1) Raspberry Pi 4B TURBO case With Integrated Camera Module
+https://www.youtube.com/watch?v=kXgKs1Zv43U
+https://www.thingiverse.com/thing:4912025
+(2) LED lamp
+https://www.thingiverse.com/thing:1531729
