@@ -37,6 +37,10 @@ lamp_thd = None
 mobile_thd = None
 music_thd = None
 
+mobile_flag = False
+led_flag = False
+music_flag= False
+
 
 temp = None
 
@@ -101,10 +105,8 @@ def eyeController():
     global prev
     global STATS
     global flag
-    global scnt
-    global slimit
-    global wcnt
-    global wlimit
+    global scnt, wcnt
+    global slimit, wlimit
 
     count0 = eye_list.count(constant.OPEN) #open
     count1 = eye_list.count(constant.CLOSE) #close
@@ -117,11 +119,7 @@ def eyeController():
     
     rate = rateCalculator()
     
-    print("rate is ", rate)
-
-    # print("rate", rate, "init stats", INIT_STATS)
     if(eye_list[len(eye_list)-1] == constant.EMPTY and flag == 0): #baby detection failed
-        # print("baby isn't detected")
         exist_cnt = exist_cnt + 1
         if exist_cnt == 10:
             STATS = constant.NONE
@@ -129,32 +127,27 @@ def eyeController():
             exist_cnt = 0
     else: #baby detected:
         if eye_list.count(constant.EMPTY) == 15:
-            # print("it is time to exit")
             STATS = constant.NONE
             baby = constant.NONE
         if rate >= 0.8:
-            # print("baby is waken")
             baby = constant.WAKE
             INIT_STATS = constant.WAKE
             wakecounter()
             prev = 1
         elif rate >= 0.4: #0.2 
             if INIT_STATS == constant.SLEEP:
-                # print("baby is awaked!!")
                 baby = constant.AWAKE
                 STATS = baby
                 if STATS == constant.SCHECK:
                     scnt = 0 # SLEEP 임계값 체크 중인데 AWAKE라면 cnt 초기화
 
             elif INIT_STATS == constant.WAKE:
-                # print("baby is falling asleep")
                 baby = constant.ASLEEP
                 if prev == 1:
                     asleep() # 졸린 첫 순간, 순차적으로 GPIO 가동
                 if STATS == constant.WCHECK:
                     wcnt = 0 # WAKE 임계값 체크 중인데 ASLEEP라면 cnt 초기화
         else:
-            # print("baby is sleeping")
             baby = constant.SLEEP    
             INIT_STATS = constant.SLEEP  
             sleepcounter()
@@ -162,47 +155,40 @@ def eyeController():
 def statusController():
 
     global STATS, thread_state, mobile_thd, led_thd, music_thd, lamp_thd, temp
+    global mobile_flag, music_flag, led_flag
 
-    # for log
-    if(temp != STATS):
-        print("STATS", STATS)
-        temp = STATS
-        
     if STATS == constant.WAKE:
-        print("WAKE")
-        # 애기 완전히 깸. GPIO UP
-        if(mobile_thd == None):
-                mobile_thd = threading.Thread(target=mobile.mobile)
-                mobile.mobile_state = True
-                mobile_thd.start() 
         
-        if(led_thd == None):
-                led_thd = threading.Thread(target=led.randomLight)
-                led.power = True
-                led_thd.start()
+        if(mobile_thd == None and mobile_flag == False):
+            makeThread("mobile")
         
-        if(music_thd == None):
-                music_thd = threading.Thread(target=music.playMusic)
-                music.music = "a"
-                music.music_state = True 
-                music_thd.start()
+        if(led_thd == None and led_flag == False):
+            makeThread("led")
+        
+        if(music_thd == None and music_flag == False):
+            music.music = "a"
+            makeThread("music")
         
         if(lamp_thd == None):
-                lamp_thd = threading.Thread(target=led.lampLightOn)
-                led.lamp_power = True 
-                lamp_thd.start()
+            makeThread("lamp")
+    
     
     if STATS == constant.SLEEP:
-        print("SLEEP!")
-        # 애기 완전히 잠들었음. GPIO stop
         if(thread_state == True):
             joinGpioThread()
 
+
     if STATS == constant.AWAKE:
-        print("AWAKE")
+        mobile_flag = False
+        music_flag = False
+        led_flag = False
+
         
     if baby == constant.ASLEEP:
-        print("ASLEEP")
+        mobile_flag = False
+        music_flag = False
+        led_flag = False
+        
         if(music_thd != None):
             joinThread("music")
              
@@ -221,22 +207,22 @@ def makeThread(thd):
     global led_thd,lamp_thd, mobile_thd, music_thd
     
         
-    if(thd == "led"):
+    if(thd == "led" and led_thd == None):
         led_thd = threading.Thread(target=led.randomLight) 
         led.power = True
         led_thd.start()
     
-    elif(thd == "lamp"):
+    elif(thd == "lamp" and lamp_thd == None):
         lamp_thd = threading.Thread(target=led.lampLightOn)
         led.lamp_power = True
         lamp_thd.start()
      
-    elif(thd == "mobile"):
+    elif(thd == "mobile" and mobile_thd == None):
         mobile_thd = threading.Thread(target=mobile.mobile) 
         mobile.mobile_state = True
         mobile_thd.start()
 
-    elif(thd == "music"):
+    elif(thd == "music" and music_thd == None):
         music_thd = threading.Thread(target=music.playMusic)
         music.music_state = True
         music_thd.start()
@@ -247,7 +233,8 @@ def makeThread(thd):
 
 def joinThread(thd):
     global led_thd,lamp_thd, mobile_thd, music_thd
-    
+    global mobile_flag, led_flag, music_flag
+     
     if(thd == "led" and led_thd != None):
         led.power = False
         led_thd.join()
@@ -264,7 +251,7 @@ def joinThread(thd):
         mobile_thd.join()
         mobile_thd = None
         
-    elif(thd == "music" and music_thd != None):
+    elif(thd == "music" and music_thd != None ):
         music.endMusic()
         music_thd.join()
         music_thd = None
@@ -299,7 +286,6 @@ def checkThd():
     else:
         thread_state = True
     
-    print("thread state is ", thread_state)
     return
 
 def main():
@@ -318,7 +304,6 @@ def main():
                 joinGpioThread()
             
             checkThd()
-            
                 
         except KeyboardInterrupt:
             joinGpioThread()

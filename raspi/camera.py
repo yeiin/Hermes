@@ -28,15 +28,14 @@ LEFT_EYEBROW =[ 336, 296, 334, 293, 300, 276, 283, 282, 295, 285 ]
 # right eyes indices
 RIGHT_EYE=[ 33, 7, 163, 144, 145, 153, 154, 155, 133, 173, 157, 158, 159, 160, 161 , 246 ]  
 RIGHT_EYEBROW=[ 70, 63, 105, 66, 107, 55, 65, 52, 53, 46 ]
-#print(">>>>1")
+
 map_face_mesh = mp.solutions.face_mesh
 # camera object 
 camera = cv.VideoCapture(0)
-#print(">>>>2")
+
 
 # landmark detection function 
 def landmarksDetection(img, results, draw=False):
-    #print(">>>>3")
 
     img_height, img_width= img.shape[:2]
     # list[(x,y), (x,y)....]
@@ -49,7 +48,6 @@ def landmarksDetection(img, results, draw=False):
 
 # Euclaidean distance 
 def euclaideanDistance(point, point1):
-    #print(">>>>4")
 
     x, y = point
     x1, y1 = point1
@@ -90,14 +88,12 @@ def blinkRatio(img, landmarks, right_indices, left_indices):
     ratio = (reRatio+leRatio)/2
     return ratio 
 
-#print(">>>>5")
 
 def main():
     global frame_counter, CEF_COUNTER, TOTAL_BLINKS
     
     try:
         with map_face_mesh.FaceMesh(min_detection_confidence =0.5, min_tracking_confidence=0.5) as face_mesh:
-            #print(">>>>6")
 
             # starting time here 
             start_time = time.time()
@@ -157,7 +153,7 @@ def main():
             cv.destroyAllWindows()
             camera.release()
     except KeyboardInterrupt:
-        print(">>>>>>>>>>>>>>>>>>>>>>>>camera interrupt")
+        print("KeyboardInterrupt")
         
 if __name__ == "__main__":
 	main()

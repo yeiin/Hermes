@@ -48,14 +48,7 @@ def mobile():
 
             #다음 동작 기다리기
             time.sleep(0.01)
-        print("end mobile")
+        
     except KeyboardInterrupt:   # Ctrl+c => 종료
         GPIO.cleanup()
         
-# def main(): 
-#     global mobile_state
-#     mobile_state=True
-#     mobile()
-
-# if __name__ == "__main__":
-# 	main()

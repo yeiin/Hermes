@@ -29,7 +29,6 @@ def init():
     server_socket.listen()
 
     client_socket, addr = server_socket.accept()
-    print(">>>>>>>>>>>>>>client", client_socket)
 
 def receive():
     global code, client_socket, addr
@@ -41,20 +40,16 @@ def receive():
             break
         
         if data == b'\x00\x012':
-            print("mobile on")
-
-            if(baby.thread_state == True):
-                baby.makeThread("mobile")
-            else:
-                baby.makeThread("mobile") 
-                baby.thread_state = True
+            baby.mobile_flag = True 
+            baby.makeThread("mobile")
+            baby.checkThd()
                 
         elif data == b'\x00\x0222':
-            print("mobile off")
+            baby.mobile_flag = True
             baby.joinThread("mobile")
             
         elif data == b'\x00\x013':
-            #need
+            baby.led_flag = True
             if(baby.thread_state == True):
                 baby.makeThread("led")
             else:
@@ -62,35 +57,32 @@ def receive():
                 baby.thread_state = True
             
         elif data == b'\x00\x0233':
+            baby.led_flag = True
             baby.joinThread("led")
+            
                 
         elif data == b'\x00\x0255':
+            music.music = "a"
+            baby.music_flag = True
             if music.music_state == True:
                 music.changeMusic("a")
-            elif(baby.thread_state == True):
-                baby.makeThread("music")
             else:
-                baby.makeThread("music") 
-                baby.thread_state = True
-            music.music = "a"
-            
+                baby.makeThread("music")
+                baby.checkThd()
+           
         elif data == b'\x00\x03555':
-            print("music b") 
+            music.music = "b"
+            baby.music_flag = True 
             if music.music_state == True:
                 music.changeMusic("b")
-            elif(baby.thread_state == True):
-                baby.makeThread("music")
             else:
                 baby.makeThread("music") 
-                baby.thread_state = True
-            music.music = "b"
+                baby.checkThd()
             
         elif data == b'\x00\x015':
+            baby.music_flag = True
             baby.joinThread("music")
 
-        else:
-            print(">>>>>>>>>>>>>else data", data)
-        
  
 def send():   
     global msg, client_socket
@@ -138,7 +130,6 @@ def send():
 def close():
     global rt, st
     global client_socket, server_socket
-    # 소켓을 닫습니다.
     if client_socket != None:
         client_socket.close()
     server_socket.close()

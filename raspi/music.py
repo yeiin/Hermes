@@ -36,11 +36,4 @@ def endMusic():
     global music_state
     music_state = False
     pygame.mixer.music.stop()
-    print("ends")
     return
-
-def main():
-    playMusic()
-
-if __name__ == "__main__":
-	main()

@@ -19,14 +19,13 @@ def main():
 	except KeyboardInterrupt:
 		global flag_exit
 		flag_exit = True
-
+		
 		if(baby.thread_state == True):
 			baby.joinGpioThread()
 		network.close()
 		join(t1, t2, t3)
 
 def join(t1, t2, t3):
-    print(">>>>main join")
     t1.join()
     t2.join()	
     t3.join()

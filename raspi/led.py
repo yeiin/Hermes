@@ -19,22 +19,16 @@ GPIO.setup(LED1, GPIO.OUT)
 GPIO.setup(LED2, GPIO.OUT)
 GPIO.setup(LAMP, GPIO.OUT)
 
-# pwm1 = GPIO.PWM(LED1,50) #50hz  
-# pwm2 = GPIO.PWM(LED2,50) #50hz  
 pwm3 = GPIO.PWM(LAMP, 50)
-
-# pwm1.start(0)  
-# pwm2.start(0)  
 pwm3.start(0)
 
-# dc = 0
 lamp_dc = 0
 power = False
 lamp_power = False
 
 #pwm lamp on
 def lampLightOn(): 
-    global dc, lamp_power, lamp_dc
+    global lamp_power, lamp_dc
     lamp_power = True
 
     lamp_dc = 0
@@ -49,8 +43,6 @@ def lampLightOn():
 
 #lamp off
 def lampOff():
-    global lamp_dc
-    print(">>off")
     GPIO.output(LAMP, GPIO.LOW)
     return
 
@@ -84,23 +76,3 @@ def randomLight():
             dc = 0
             GPIO.output(LED2, GPIO.LOW)
 
-    
-
-# #for network
-# def changLampDutyCycle(mode):
-#     global lamp_dc
-#     if(mode == 0):   #dark
-#         if(lamp_dc >= 10):
-#             lamp_dc -= 10
-#             pwm3.ChangeDutyCycle(lamp_dc)
-#     else: #bright
-#         if(lamp_dc<=90):
-#             lamp_dc += 10
-#             pwm3.ChangeDutyCycle(lamp_dc)
-
-
-def main():
-    lampOff()
-
-if __name__ == "__main__":
-	main()
