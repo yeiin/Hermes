@@ -203,7 +203,7 @@ camera.py put baby's state in queue.</br>
 
 </br> count rate = Open/Queue's size</br>
 
-|count rate|----|
+|count rate||
 |----------|----|
 |Wake|>=0.8|
 |ASLEEP|>=0.4 and Init stat = Wake|
@@ -223,14 +223,14 @@ camera.py put baby's state in queue.</br>
 >> Wake, Awake, Asleep, Sleep
 
 ### Andriod App
-|State Notification and Control|----------------------|
-|------------------------------|----------------------|
-|:State of Baby|:Asleep or Awake or Sleep or Wake or Detect X|
-|:Mobile|:ON or OFF|
-|:LED|:ON or OFF|
-|:Music|:Play or Stop and choose music|
-|:Illuminance|:Level 0 - 10|
-|:Mode|:Auto or User|
+|State Notification and Control||
+|:------------------------------|:----------------------|
+|State of Baby|Asleep or Awake or Sleep or Wake or Detect X|
+|Mobile|ON or OFF|
+|LED|ON or OFF|
+|Music|Play or Stop and choose music|
+|Illuminance|Level 0 - 10|
+|Mode|Auto or User|
 
 </br>
 
