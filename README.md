@@ -56,10 +56,8 @@
 │   │   ├── model
 │   │   │   └── haarcascades
 │   │   │       ├── haarcascade_eye.xml
-│   │   │       └── haarcascade_frontalface_default.xml
-│   │   ├── __pycache__  
+│   │   │       └── haarcascade_frontalface_default.xml 
 │   │   └── simple_streamer.py
-│   ├── __pycache__
 │   │   
 │   ├── templates
 │   │   └── index.html
@@ -97,9 +95,10 @@ encoding : utf-8 </br>
  
 # Dependency
 ### Raspberry Pi
-> Open CV
->> OpenCV :  
->> MediaPipe 
+> Open CV 
+>> opencv-python : 4.6.0.66
+>> mediapipe-rpi4 : 0.8.8
+>> Python : 3.7.3 
 >> etc.
 
 ### Android
@@ -108,7 +107,7 @@ encoding : utf-8 </br>
 >>ACCESS_NETWORK_STATE Permission
 
 ### Demo
-> 3D pring
+> 3D printing
 
 # Project
 
@@ -119,6 +118,7 @@ Calculate the eye ratio with eye's width and height.</br>
 |-----|-----|
 |Close|>=4.5|
 |Open|else|
+</br>
 
 ### Baby Status Judgement
 #### baby.py
@@ -139,7 +139,7 @@ camera.py put baby's state in queue.</br>
 
 </br>
 
-> Init stat only can be Wake/Sleep
+> Init_Stat only can be Wake/Sleep
 >> If baby is wake, blink count decreasing, it goes Asleep.</br>
 >> If baby is sleep, blink ocunt increasing, it goes Awake.</br>
 </br>
@@ -147,6 +147,27 @@ camera.py put baby's state in queue.</br>
 #### Final result using for GPIO
 > STATS
 >> Wake, Awake, Asleep, Sleep
+
+
+### GPIO with baby status
+
+> No APP Signal
+|BABY|GPIO|
+|:----|:----|
+|WAKE|LED ON, Mobile On, Music on, Lamp more bright|
+|SLEEP|All GPIO is Off|
+|ASLEEP|Mobile On, Led off, Music off, Lamp darker|
+
+### Handling APP Signal
+
+> GPIO operation as manipulated in the app, regardless of auto-run.
+
+> When the child state changes, it switches back to automatic mode.
+>> Wake -> Asleep
+>> Sleep -> Awake
+
+
+
 
 ### Andriod App
 |State Notification and Control||
@@ -179,6 +200,14 @@ Lee yein : GPIO, socket, overall running of the project</br>
 ``` python3 camera.py``` </br>
 </br> raspi/baby.py : realtime baby's status judgement linked with camera.py and Gpio operation </br>
 ``` python3 main.py ``` </br>
+</br> raspi/led.py : led on off, pwm
+``` python3 led.py ``` </br>
+</br> raspi/mobile.py : mobile on off
+``` python3 mobile.py ``` </br>
+</br> raspi/music.py : music on off and change
+``` python3 music.py ``` </br>
+</br> raspi/network.py : socket and app signal handling
+``` python3 network.py ``` </br>
 
 # Reference
 1. Camera detecting (camera.py)</br>
@@ -191,4 +220,9 @@ https://www.youtube.com/watch?v=kXgKs1Zv43U</br>
 https://www.thingiverse.com/thing:4912025</br>
 (2) LED lamp</br>
 https://www.thingiverse.com/thing:1531729
-
+3. WebView</br>
+https://1d1cblog.tistory.com/21</br>
+4. socket</br>
+https://developmentdiary.tistory.com/510</br>
+5. raspberry pi </br>
+https://github.com/eleparts/raspi-AdvancedKit </br>
