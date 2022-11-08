@@ -144,10 +144,9 @@
 ```
 
 
-
 # Environment
 
-## raspberry pi 4
+## Raspberry pi 4
 code editor : VScode with ssh connection to pi</br>
 model name : Raspberry Pi 4 Model B Rev 1.5 </br>
 CPU: ARM Cortex-A72 1.5GHz</br>
@@ -155,7 +154,7 @@ RAM: 2GB </br>
 Linux version 5.15.76-v7l+ (dom@buildbot) (arm-linux-gnueabihf-gcc-8 (Ubuntu/Linaro 8.4.0-3ubuntu1) 8.4.0, GNU ld (GNU Binutils for Ubuntu) 2.34) #1597 SMP Fri Nov 4 12:14:58 GMT 2022 </br>
 
 
-## android
+## Android
 #### build.gradle
 'com.android.application': version '7.3.0' </br>
 'com.android.library' : version '7.3.0' </br>
@@ -169,12 +168,21 @@ xml version : 1.0 </br>
 encoding : utf-8 </br>
 
  
-
-
  
 # Dependency
-camera detecting, realtime status judgement, 3D print </br>
-camera detecting : OpenCV, MediaPipe etc.</br>
+### Raspberry Pi
+> Open CV
+>> OpenCV :  
+>> MediaPipe 
+>> etc.
+
+### Android
+> Manifest
+>>INTERNET Permission
+>>ACCESS_NETWORK_STATE Permission
+
+### Demo
+> 3D pring
 
 # Project
 
@@ -185,8 +193,6 @@ Calculate the eye ratio with eye's width and height.</br>
 |-----|-----|
 |Close|>=4.5|
 |Open|else|
-</br>
-</br>
 
 ### Baby Status Judgement
 #### baby.py
@@ -198,6 +204,7 @@ camera.py put baby's state in queue.</br>
 </br> count rate = Open/Queue's size</br>
 
 |count rate|----|
+|----------|----|
 |Wake|>=0.8|
 |ASLEEP|>=0.4 and Init stat = Wake|
 |AWAKE| >=0.4 and Init stat = Sleep|
@@ -205,6 +212,7 @@ camera.py put baby's state in queue.</br>
 |None|No detect above threshold|
 
 </br>
+
 > Init stat only can be Wake/Sleep
 >> If baby is wake, blink count decreasing, it goes Asleep.</br>
 >> If baby is sleep, blink ocunt increasing, it goes Awake.</br>
@@ -213,6 +221,23 @@ camera.py put baby's state in queue.</br>
 #### Final result using for GPIO
 > STATS
 >> Wake, Awake, Asleep, Sleep
+
+### Andriod App
+|State Notification and Control|----------------------|
+|------------------------------|----------------------|
+|:State of Baby|:Asleep or Awake or Sleep or Wake or Detect X|
+|:Mobile|:ON or OFF|
+|:LED|:ON or OFF|
+|:Music|:Play or Stop and choose music|
+|:Illuminance|:Level 0 - 10|
+|:Mode|:Auto or User|
+
+</br>
+
+> If click State of baby, you can watch real-time video
+
+</br>
+
 
 ### Diagram
 <!-- 전체 플로우는 내가 할게 + diagram -->
