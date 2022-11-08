@@ -98,7 +98,7 @@ encoding : utf-8 </br>
 > Open CV 
 >> opencv-python : 4.6.0.6</br>
 >> mediapipe-rpi4 : 0.8.8</br>
->> Python : 3.7.3</br>
+>> Python : 3.7.3
 >> etc.
 
 ### Android
