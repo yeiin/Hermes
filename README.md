@@ -242,9 +242,10 @@ camera.py put baby's state in queue.</br>
 ### Diagram
 <!-- 전체 플로우는 내가 할게 + diagram -->
 
-# Contribute
-</br>Choi Yunseo : camera detecting, realtime status judgement, 3D print </br>
-</br>
+# Contributor
+Choi Yunseo : camera detecting, realtime status judgement, 3D print </br>
+Lee Jieun : Android application, socket </br>
+Lee yein : GPIO, socket, overall running of the project</br>
 
 # Usage
 
@@ -265,7 +266,3 @@ https://www.thingiverse.com/thing:4912025</br>
 (2) LED lamp</br>
 https://www.thingiverse.com/thing:1531729
 
-
-#application 전제내용 ///참고 후 이 문장 삭제 부탁드려용
-![readme_app_1](https://user-images.githubusercontent.com/100847440/200597432-03ac2e1d-6ccd-47c4-9786-a2e4edf24b2b.jpeg)
-![readme_app_2](https://user-images.githubusercontent.com/100847440/200597460-9160d898-30cd-42e7-93db-ceedfff15560.jpeg)"
