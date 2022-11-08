@@ -21,84 +21,27 @@
 ```
 .
 ├── HERMES_APPLICATION
-│   ├── app
-│   │   ├── build.gradle
-│   │   ├── libs
-│   │   ├── proguard-rules.pro
-│   │   └── src
-│   │       ├── androidTest
-│   │       │   └── java
-│   │       │       └── com
-│   │       │           └── example
-│   │       │               └── hermes_application
-│   │       │                   └── ExampleInstrumentedTest.java
-│   │       ├── main
-│   │       │   ├── AndroidManifest.xml
-│   │       │   ├── java
-│   │       │   │   └── com
-│   │       │   │       └── example
-│   │       │   │           └── hermes_application
-│   │       │   │               ├── BabyVideoActivity.java
-│   │       │   │               ├── IntroActivity.java
-│   │       │   │               ├── MainActivity.java
-│   │       │   │               └── MusicActivity.java
-│   │       │   └── res
-│   │       │       ├── drawable
-│   │       │       │   ├── ex1.png
-│   │       │       │   └── ic_launcher_background.xml
-│   │       │       ├── drawable-v24
-│   │       │       │   └── ic_launcher_foreground.xml
-│   │       │       ├── layout
-│   │       │       │   ├── activity_baby_video.xml
-│   │       │       │   ├── activity_intro.xml
-│   │       │       │   ├── activity_main.xml
-│   │       │       │   └── activity_music.xml
-│   │       │       ├── mipmap-anydpi-v26
-│   │       │       │   ├── ic_launcher_round.xml
-│   │       │       │   └── ic_launcher.xml
-│   │       │       ├── mipmap-hdpi
-│   │       │       │   ├── ic_launcher_round.webp
-│   │       │       │   └── ic_launcher.webp
-│   │       │       ├── mipmap-mdpi
-│   │       │       │   ├── ic_launcher_round.webp
-│   │       │       │   └── ic_launcher.webp
-│   │       │       ├── mipmap-xhdpi
-│   │       │       │   ├── ic_launcher_round.webp
-│   │       │       │   └── ic_launcher.webp
-│   │       │       ├── mipmap-xxhdpi
-│   │       │       │   ├── ic_launcher_round.webp
-│   │       │       │   └── ic_launcher.webp
-│   │       │       ├── mipmap-xxxhdpi
-│   │       │       │   ├── ic_launcher_round.webp
-│   │       │       │   └── ic_launcher.webp
-│   │       │       ├── values
-│   │       │       │   ├── colors.xml
-│   │       │       │   ├── strings.xml
-│   │       │       │   └── themes.xml
-│   │       │       ├── values-night
-│   │       │       │   └── themes.xml
-│   │       │       └── xml
-│   │       │           ├── backup_rules.xml
-│   │       │           └── data_extraction_rules.xml
-│   │       └── test
-│   │           └── java
-│   │               └── com
-│   │                   └── example
-│   │                       └── hermes_application
-│   │                           └── ExampleUnitTest.java
-│   ├── build.gradle
-│   ├── gradle
-│   │   └── wrapper
-│   │       ├── gradle-wrapper.jar
-│   │       └── gradle-wrapper.properties
-│   ├── gradle.properties
-│   ├── gradlew
-│   ├── gradlew.bat
-│   └── settings.gradle
+│   └── app
+│       └── src
+│           ├── main
+│               ├── AndroidManifest.xml
+│               ├── java
+│               │   └── com
+│               │       └── example
+│               │           └── hermes_application
+│               │               ├── BabyVideoActivity.java
+│               │               ├── IntroActivity.java
+│               │               ├── MainActivity.java
+│               │               └── MusicActivity.java
+│               └── res
+│                   └── layout
+│                       ├── activity_baby_video.xml
+│                       ├── activity_intro.xml
+│                       ├── activity_main.xml
+│                       └── activity_music.xml
+│  
 ├── raspi
 │   ├── asset
-│   │   ├── music_a.mp3
-│   │   └── music_b.mp3
 │   ├── baby.py
 │   ├── camera.py
 │   ├── constant.py
@@ -114,32 +57,15 @@
 │   │   │   └── haarcascades
 │   │   │       ├── haarcascade_eye.xml
 │   │   │       └── haarcascade_frontalface_default.xml
-│   │   ├── __pycache__
-│   │   │   ├── face_detector.cpython-37.pyc
-│   │   │   ├── __init__.cpython-37.pyc
-│   │   │   └── simple_streamer.cpython-37.pyc
+│   │   ├── __pycache__  
 │   │   └── simple_streamer.py
 │   ├── __pycache__
-│   │   ├── audio.cpython-37.pyc
-│   │   ├── baby.cpython-37.pyc
-│   │   ├── camera.cpython-37.pyc
-│   │   ├── constant.cpython-37.pyc
-│   │   ├── led.cpython-37.pyc
-│   │   ├── led.cpython-39.pyc
-│   │   ├── mobile.cpython-37.pyc
-│   │   ├── motor.cpython-37.pyc
-│   │   ├── music.cpython-37.pyc
-│   │   ├── network.cpython-37.pyc
-│   │   ├── socket.cpython-37.pyc
-│   │   └── utils.cpython-37.pyc
+│   │   
 │   ├── templates
 │   │   └── index.html
 │   ├── utils.py
 │   └── videostream.py
 ├── README.md
-└── tree.txt
-
-42 directories, 76 files
 
 ```
 
